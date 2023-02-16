@@ -28,7 +28,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Library Include="..\..\x64\Release\rnnoise-windows.lib">
+    <Library Include="..\..\rnnoise-windows.lib">
       <Filter>Resource Files</Filter>
     </Library>
   </ItemGroup>

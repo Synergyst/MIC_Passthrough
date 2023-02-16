@@ -41,7 +41,7 @@ EXPORT int dontRun();
 EXPORT int shallRun();
 EXPORT int getRunStatus();
 EXPORT int retDevNameList(char* playbackCount, char* captureCount, char* playbackListGUI, char* captureListGUI, int len);
-void data_callback(ma_device* pDevice, void* pOutput, const void* pInput, ma_uint32 frameCount) {
+void *data_callback(ma_device* pDevice, void* pOutput, const void* pInput, ma_uint32 frameCount) {
   if (st[0]) {
     short* pInputS16 = (short*)pInput;
     float* tempOut = calloc(frameCount * sizeof(float), sizeof(float));
@@ -239,7 +239,7 @@ int spawnNewMiniaudioThread(int threadIndex, int deviceMode, int *realmicDeviceI
       //deviceConfig[threadIndex].periodSizeInMilliseconds = 10;
       //deviceConfig[threadIndex].periods = 3;
       //deviceConfig[threadIndex].dataCallback = callbackFuncArr[threadIndex];
-      deviceConfig[threadIndex].dataCallback = data_callback;
+      deviceConfig[threadIndex].dataCallback = &data_callback;
       /*realFrameCount = deviceConfig[threadIndex].periodSizeInMilliseconds * (deviceConfig[threadIndex].sampleRate / 1000);
       sizeOfAudioFrame = (realFrameCount * ma_get_bytes_per_frame(deviceConfig[threadIndex].playback.format, deviceConfig[threadIndex].playback.channels));
       fftFrameCnt = (realFrameCount + nbits);
