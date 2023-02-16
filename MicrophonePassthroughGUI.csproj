@@ -7,7 +7,7 @@
     <ProjectGuid>{004BAC68-D38C-4D94-8AFA-CBB533193A8D}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>MicrophonePassthrough</RootNamespace>
-    <AssemblyName>Microphone Passthrough</AssemblyName>
+    <AssemblyName>Microphone_Passthrough</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <LangVersion>8.0</LangVersion>
     <FileAlignment>512</FileAlignment>
@@ -64,6 +64,9 @@
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
@@ -102,6 +105,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="app.manifest" />
+    <None Include="ComodoSSL-Code-Signing-Cert-SHA1-new.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -136,5 +140,8 @@
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>.\sign.bat</PostBuildEvent>
   </PropertyGroup>
 </Project>

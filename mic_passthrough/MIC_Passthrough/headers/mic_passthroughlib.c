@@ -25,11 +25,9 @@
 #pragma comment(lib, "User32.lib")
 #pragma comment(lib, "RNNoiselib.lib")
 #pragma comment(lib, "ws2_32.lib")
-#define BUFFER_SIZE 480
 WSADATA wsaData;
 SOCKET sock;
 struct sockaddr_in server_addr;
-char buffer[BUFFER_SIZE];
 int bytes_sent, ret;
 extern struct RNNModel rnnoise_model_orig;
 extern struct RNNModel rnnoise_model_5h_b_500k;
@@ -94,17 +92,15 @@ int netSend(void* frame, int frameSize) {
   }
   return 0;
 }
-int netRecv() {
+int netRecv(void* frame, int frameSize) {
   // Receive response
-  ret = recv(sock, buffer, BUFFER_SIZE, 0);
+  ret = recv(sock, frame, frameSize, 0);
   if (ret == SOCKET_ERROR) {
     printf("recv failed with error: %d\n", WSAGetLastError());
     closesocket(sock);
     WSACleanup();
     return -1;
   }
-  // Print response
-  printf("Received response: %s\n", buffer);
   return 0;
 }
 int netDeinit() {
@@ -404,9 +400,14 @@ int retDevNameList(char* playbackCount, char* captureCount, char* playbackListGU
   rnnoise_destroy(st[0]);
   return 1;
 }
+void deinitAll() {
+  ma_device_uninit(&device[0]);
+  rnnoise_destroy(st[0]);
+  shallRun();
+  netDeinit();
+}
 int startMicPassthrough(int captureDev, int playbackDev) {
   netInit("192.168.168.170", 2224);
-  //netSend("Testing\n");
   //captureDev = 1, playbackDev = 1;
   int captureDevListCnt = 1;
   int playbackDevListCnt = 1;
@@ -418,9 +419,6 @@ int startMicPassthrough(int captureDev, int playbackDev) {
     // Do nothing, which is the normal procedure..
       Sleep(50000);
   }
-  ma_device_uninit(&device[0]);
-  rnnoise_destroy(st[0]);
-  shallRun();
-  netDeinit();
+  deinitAll();
   return 0;
 }
