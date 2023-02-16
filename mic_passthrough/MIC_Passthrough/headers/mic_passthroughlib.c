@@ -25,10 +25,6 @@
 #pragma comment(lib, "User32.lib")
 #pragma comment(lib, "RNNoiselib.lib")
 #pragma comment(lib, "ws2_32.lib")
-WSADATA wsaData;
-SOCKET sock;
-struct sockaddr_in server_addr;
-int bytes_sent, ret;
 extern struct RNNModel rnnoise_model_orig;
 extern struct RNNModel rnnoise_model_5h_b_500k;
 extern struct RNNModel rnnoise_model_5h_ru_500k;
@@ -49,7 +45,15 @@ EXPORT int dontRun();
 EXPORT int shallRun();
 EXPORT int getRunStatus();
 EXPORT int retDevNameList(char* playbackCount, char* captureCount, char* playbackListGUI, char* captureListGUI, int len);
-int netInit(const char* host, int port) {
+WSADATA wsaData;
+SOCKET sock;
+struct sockaddr_in server_addr;
+int bytes_sent, ret;
+WSADATA wsaDataU;
+SOCKET sockU;
+struct sockaddr_in server_addrU;
+int bytes_sentU, retU;
+int netInitTCP(const char* host, int port) {
   sock = INVALID_SOCKET;
 
   // Initialize Winsock
@@ -82,7 +86,7 @@ int netInit(const char* host, int port) {
   }
   return 0;
 }
-int netSend(void* frame, int frameSize) {
+int netSendTCP(void* frame, int frameSize) {
   bytes_sent = send(sock, (const char*)frame, frameSize, 0);
   if (bytes_sent == SOCKET_ERROR) {
     printf("send failed with error: %d\n", WSAGetLastError());
@@ -92,7 +96,7 @@ int netSend(void* frame, int frameSize) {
   }
   return 0;
 }
-int netRecv(void* frame, int frameSize) {
+int netRecvTCP(void* frame, int frameSize) {
   // Receive response
   ret = recv(sock, frame, frameSize, 0);
   if (ret == SOCKET_ERROR) {
@@ -103,9 +107,59 @@ int netRecv(void* frame, int frameSize) {
   }
   return 0;
 }
+int netInitUDP(const char* host, int port) {
+  sockU = INVALID_SOCKET;
+
+  // Initialize Winsock
+  retU = WSAStartup(MAKEWORD(2, 2), &wsaDataU);
+  if (retU != 0) {
+    printf("WSAStartup failed with error: %d\n", retU);
+    return -1;
+  }
+
+  // Create a UDP socket
+  sockU = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+  if (sockU == INVALID_SOCKET) {
+    printf("socket failed with error: %ld\n", WSAGetLastError());
+    WSACleanup();
+    return -1;
+  }
+
+  // Set server address
+  server_addrU.sin_family = AF_INET;
+  server_addrU.sin_port = htons(port);
+  server_addrU.sin_addr.s_addr = inet_addr(host);
+  return 0;
+}
+int netSendUDP(void* frame, int frameSize) {
+  bytes_sentU = sendto(sockU, (const char*)frame, frameSize, 0, (struct sockaddr*)&server_addrU, sizeof(server_addrU));
+  if (bytes_sentU == SOCKET_ERROR) {
+    printf("sendto failed with error: %d\n", WSAGetLastError());
+    closesocket(sockU);
+    WSACleanup();
+    return -1;
+  }
+  return 0;
+}
+int netRecvUDP(void* frame, int frameSize) {
+  retU = recvfrom(sockU, (const char*)frame, frameSize, 0, (struct sockaddr*)&server_addrU, sizeof(server_addrU));
+  if (retU == SOCKET_ERROR) {
+    printf("sendto failed with error: %d\n", WSAGetLastError());
+    closesocket(sockU);
+    WSACleanup();
+    return -1;
+  }
+  return 0;
+}
 int netDeinit() {
   // Clean up
   closesocket(sock);
+  WSACleanup();
+  return 0;
+}
+int netDeinitU() {
+  // Clean up
+  closesocket(sockU);
   WSACleanup();
   return 0;
 }
@@ -119,7 +173,10 @@ void *data_callback(ma_device* pDevice, void* pOutput, const void* pInput, ma_ui
     float vadProbability = rnnoise_process_frame(st[0], tempOut, tempOut);
     for (int i = 0; i < frameCount; i++) tempIn[i] = tempOut[i];
     ma_convert_pcm_frames_format(pOutput, ma_format_s16, tempIn, ma_format_s16, (frameCount), 1, ma_dither_mode_none);
-    netSend(tempIn, frameCount * sizeof(short));
+    //netSendTCP(tempIn, frameCount * sizeof(short));
+    netSendUDP(tempIn, frameCount * sizeof(short));
+    //netSendTCP(tempIn, frameCount * sizeof(short), 1);
+    //netSendUDP(tempIn, frameCount * sizeof(short), 1);
     free(tempIn);
     free(tempOut);
   } else {
@@ -404,10 +461,14 @@ void deinitAll() {
   ma_device_uninit(&device[0]);
   rnnoise_destroy(st[0]);
   shallRun();
-  netDeinit();
+  //netDeinit();
+  netDeinitU();
 }
 int startMicPassthrough(int captureDev, int playbackDev) {
-  netInit("192.168.168.170", 2224);
+  //netInitTCP("192.168.168.170", 2224);
+  netInitUDP("192.168.168.170", 2224);
+  //netInitTCP("192.168.168.170", 2225, 1);
+  //netInitUDP(ipAddr, portNum, 1);
   //captureDev = 1, playbackDev = 1;
   int captureDevListCnt = 1;
   int playbackDevListCnt = 1;
