@@ -3,6 +3,11 @@
 #define MINIAUDIO_IMPLEMENTATION
 #define SAMPLE_RATE 48000
 #define CHANNEL_COUNT 1
+#define _WINSOCK_DEPRECATED_NO_WARNINGS
+#define EXPORT __declspec(dllexport)
+#define M_PI 3.14159265358979323846264338327
+#include <WinSock.h>
+#include <stdio.h>
 #include <assert.h>
 #include <time.h>
 #include <stdio.h>
@@ -17,10 +22,15 @@
 #include <process.h>
 #include "miniaudio.h"
 #include "rnnoise.h"
-//#include "smbPitchShift.h"
 #pragma comment(lib, "User32.lib")
-#define EXPORT __declspec(dllexport)
-#define M_PI 3.14159265358979323846264338327
+#pragma comment(lib, "RNNoiselib.lib")
+#pragma comment(lib, "ws2_32.lib")
+#define BUFFER_SIZE 480
+WSADATA wsaData;
+SOCKET sock;
+struct sockaddr_in server_addr;
+char buffer[BUFFER_SIZE];
+int bytes_sent, ret;
 extern struct RNNModel rnnoise_model_orig;
 extern struct RNNModel rnnoise_model_5h_b_500k;
 extern struct RNNModel rnnoise_model_5h_ru_500k;
@@ -41,6 +51,68 @@ EXPORT int dontRun();
 EXPORT int shallRun();
 EXPORT int getRunStatus();
 EXPORT int retDevNameList(char* playbackCount, char* captureCount, char* playbackListGUI, char* captureListGUI, int len);
+int netInit(const char* host, int port) {
+  sock = INVALID_SOCKET;
+
+  // Initialize Winsock
+  ret = WSAStartup(MAKEWORD(2, 2), &wsaData);
+  if (ret != 0) {
+    printf("WSAStartup failed with error: %d\n", ret);
+    return -1;
+  }
+
+  // Create a TCP socket
+  sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+  if (sock == INVALID_SOCKET) {
+    printf("socket failed with error: %ld\n", WSAGetLastError());
+    WSACleanup();
+    return -1;
+  }
+
+  // Set server address
+  server_addr.sin_family = AF_INET;
+  server_addr.sin_port = htons(port);
+  server_addr.sin_addr.s_addr = inet_addr(host);
+
+  // Connect to server
+  ret = connect(sock, (struct sockaddr*)&server_addr, sizeof(server_addr));
+  if (ret == SOCKET_ERROR) {
+    printf("connect failed with error: %d\n", WSAGetLastError());
+    closesocket(sock);
+    WSACleanup();
+    return -1;
+  }
+  return 0;
+}
+int netSend(void* frame, int frameSize) {
+  bytes_sent = send(sock, (const char*)frame, frameSize, 0);
+  if (bytes_sent == SOCKET_ERROR) {
+    printf("send failed with error: %d\n", WSAGetLastError());
+    closesocket(sock);
+    WSACleanup();
+    return -1;
+  }
+  return 0;
+}
+int netRecv() {
+  // Receive response
+  ret = recv(sock, buffer, BUFFER_SIZE, 0);
+  if (ret == SOCKET_ERROR) {
+    printf("recv failed with error: %d\n", WSAGetLastError());
+    closesocket(sock);
+    WSACleanup();
+    return -1;
+  }
+  // Print response
+  printf("Received response: %s\n", buffer);
+  return 0;
+}
+int netDeinit() {
+  // Clean up
+  closesocket(sock);
+  WSACleanup();
+  return 0;
+}
 void *data_callback(ma_device* pDevice, void* pOutput, const void* pInput, ma_uint32 frameCount) {
   if (st[0]) {
     short* pInputS16 = (short*)pInput;
@@ -51,6 +123,7 @@ void *data_callback(ma_device* pDevice, void* pOutput, const void* pInput, ma_ui
     float vadProbability = rnnoise_process_frame(st[0], tempOut, tempOut);
     for (int i = 0; i < frameCount; i++) tempIn[i] = tempOut[i];
     ma_convert_pcm_frames_format(pOutput, ma_format_s16, tempIn, ma_format_s16, (frameCount), 1, ma_dither_mode_none);
+    netSend(tempIn, frameCount * sizeof(short));
     free(tempIn);
     free(tempOut);
   } else {
@@ -332,8 +405,9 @@ int retDevNameList(char* playbackCount, char* captureCount, char* playbackListGU
   return 1;
 }
 int startMicPassthrough(int captureDev, int playbackDev) {
+  netInit("192.168.168.170", 2224);
+  //netSend("Testing\n");
   //captureDev = 1, playbackDev = 1;
-  
   int captureDevListCnt = 1;
   int playbackDevListCnt = 1;
   initSoundHardwareVars(captureDevListCnt, playbackDevListCnt);
@@ -347,5 +421,6 @@ int startMicPassthrough(int captureDev, int playbackDev) {
   ma_device_uninit(&device[0]);
   rnnoise_destroy(st[0]);
   shallRun();
+  netDeinit();
   return 0;
 }
