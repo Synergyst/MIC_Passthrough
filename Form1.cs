@@ -47,23 +47,16 @@ namespace MicrophonePassthrough {
             retDevNameList(playMsg, capMsg, playMsgList, capMsgList, capMsg.Capacity);
             string[] playbackList = playMsgList.ToString().Split('\n');
             string[] captureList = capMsgList.ToString().Split('\n');
-            Console.WriteLine(playMsg + " : " + capMsg + "\n" + playMsgList + capMsgList);
-            for (int i = 0; i < Convert.ToInt32(playMsg.ToString()); i++) {
-                Console.WriteLine("play->[" + i + "]: " + playbackList[i]);
-                checkedListBox1.Items.Add("[" + i + "]: " + playbackList[i]);
-            }
-            for (int i = 0; i < Convert.ToInt32(capMsg.ToString()); i++) {
-                Console.WriteLine("cap->[" + i + "]: " + captureList[i]);
-                checkedListBox2.Items.Add("[" + i + "]: " + captureList[i]);
-            }
+            for (int i = 0; i < Convert.ToInt32(playMsg.ToString()); i++) checkedListBoxVirtMic.Items.Add("[" + i + "]: " + playbackList[i]);
+            for (int i = 0; i < Convert.ToInt32(capMsg.ToString()); i++) checkedListBoxRealMic.Items.Add("[" + i + "]: " + captureList[i]);
             bool resetSettings = false;
             if (firstRun1 == true) {
                 if (resetSettings) {
                     Properties.Settings.Default.PlaybackDeviceID = 0;
                     Properties.Settings.Default.Save();
                 }
-                checkedListBox1.SetItemChecked(Properties.Settings.Default.PlaybackDeviceID, true);
-                this.checkedListBox1.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.checkedListBox1_ItemCheck);
+                checkedListBoxVirtMic.SetItemChecked(Properties.Settings.Default.PlaybackDeviceID, true);
+                this.checkedListBoxVirtMic.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.checkedListBoxVirtMic_ItemCheck);
             } else {
                 firstRun1 = false;
             }
@@ -72,8 +65,8 @@ namespace MicrophonePassthrough {
                     Properties.Settings.Default.CaptureDeviceID = 0;
                     Properties.Settings.Default.Save();
                 }
-                checkedListBox2.SetItemChecked(Properties.Settings.Default.CaptureDeviceID, true);
-                this.checkedListBox2.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.checkedListBox2_ItemCheck);
+                checkedListBoxRealMic.SetItemChecked(Properties.Settings.Default.CaptureDeviceID, true);
+                this.checkedListBoxRealMic.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.checkedListBoxRealMic_ItemCheck);
             } else {
                 firstRun2 = false;
             }
@@ -102,22 +95,22 @@ namespace MicrophonePassthrough {
             System.Threading.Thread.Sleep(1250);
             Environment.Exit(0);
         }
-        private void checkedListBox1_ItemCheck(object sender, ItemCheckEventArgs e) {
-            for (int ix = 0; ix < checkedListBox1.Items.Count; ++ix)
-                if (ix != e.Index) checkedListBox1.SetItemChecked(ix, false);
-            Properties.Settings.Default.PlaybackDeviceID = checkedListBox1.Items.IndexOf(checkedListBox1.SelectedItem.ToString());
+        private void checkedListBoxVirtMic_ItemCheck(object sender, ItemCheckEventArgs e) {
+            for (int ix = 0; ix < checkedListBoxVirtMic.Items.Count; ++ix)
+                if (ix != e.Index) checkedListBoxVirtMic.SetItemChecked(ix, false);
+            Properties.Settings.Default.PlaybackDeviceID = checkedListBoxVirtMic.Items.IndexOf(checkedListBoxVirtMic.SelectedItem.ToString());
             Console.WriteLine(Properties.Settings.Default.PlaybackDeviceID);
         }
-        private void checkedListBox2_ItemCheck(object sender, ItemCheckEventArgs e) {
-            for (int ix = 0; ix < checkedListBox2.Items.Count; ++ix)
-                if (ix != e.Index) checkedListBox2.SetItemChecked(ix, false);
-            Properties.Settings.Default.CaptureDeviceID = checkedListBox2.Items.IndexOf(checkedListBox2.SelectedItem.ToString());
+        private void checkedListBoxRealMic_ItemCheck(object sender, ItemCheckEventArgs e) {
+            for (int ix = 0; ix < checkedListBoxRealMic.Items.Count; ++ix)
+                if (ix != e.Index) checkedListBoxRealMic.SetItemChecked(ix, false);
+            Properties.Settings.Default.CaptureDeviceID = checkedListBoxRealMic.Items.IndexOf(checkedListBoxRealMic.SelectedItem.ToString());
             Console.WriteLine(Properties.Settings.Default.CaptureDeviceID);
         }
-        private void checkedListBox1_SelectedIndexChanged(object sender, EventArgs e) {
+        private void checkedListBoxVirtMic_SelectedIndexChanged(object sender, EventArgs e) {
             //
         }
-        private void checkedListBox2_SelectedIndexChanged(object sender, EventArgs e) {
+        private void checkedListBoxRealMic_SelectedIndexChanged(object sender, EventArgs e) {
             //
         }
         private void button2_Click_1(object sender, EventArgs e) {
@@ -130,15 +123,6 @@ namespace MicrophonePassthrough {
         }
         private void Form1_Load(object sender, EventArgs e) {
             //
-        }
-
-        private void button4_Click(object sender, EventArgs e) {
-            //Console.WriteLine(getVadProbability());
-            MessageBox.Show("This is currently not implemented.\n\nPlease press 'Quit' and then manually start the application again.\n");
-        }
-
-        private void button5_Click(object sender, EventArgs e) {
-            MessageBox.Show("This is currently not implemented.\n\nPlease press 'Quit' and then manually start the application again.\n");
         }
 
         private void timer1_Tick(object sender, EventArgs e) {
