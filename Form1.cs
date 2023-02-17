@@ -35,6 +35,8 @@ namespace MicrophonePassthrough {
         unsafe static extern int startMicPassthrough(int captureDev, int playbackDev);
         [System.Runtime.InteropServices.DllImport("MIC_Passthrough.dll")]
         unsafe static extern int retDevNameList(StringBuilder playbackCount, StringBuilder captureCount, StringBuilder playbackListGUI, StringBuilder captureListGUI, int len);
+        [System.Runtime.InteropServices.DllImport("MIC_Passthrough.dll")]
+        unsafe static extern float getVadProbability();
         private static bool firstRun1 = true;
         private static bool firstRun2 = true;
         private void button1_Click_1(object sender, EventArgs e) {
@@ -131,11 +133,18 @@ namespace MicrophonePassthrough {
         }
 
         private void button4_Click(object sender, EventArgs e) {
+            //Console.WriteLine(getVadProbability());
             MessageBox.Show("This is currently not implemented.\n\nPlease press 'Quit' and then manually start the application again.\n");
         }
 
         private void button5_Click(object sender, EventArgs e) {
             MessageBox.Show("This is currently not implemented.\n\nPlease press 'Quit' and then manually start the application again.\n");
+        }
+
+        private void timer1_Tick(object sender, EventArgs e) {
+            int vadProb = (int)(getVadProbability() * 1000.0F);
+            progressBar1.Value = vadProb;
+            progressBar1.Refresh();
         }
     }
 }

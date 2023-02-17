@@ -39,14 +39,18 @@ ma_device_info **pCaptureDeviceInfos;
 ma_uint32 *playbackDeviceCount, *captureDeviceCount;
 int *captureDevList;
 int *playbackDevList;
-float vadProbability;
 EXPORT int startMicPassthrough(int, int);
 EXPORT int retDevNameList(char* playbackCount, char* captureCount, char* playbackListGUI, char* captureListGUI, int len);
 EXPORT void deinitAll();
+EXPORT float getVadProbability();
 WSADATA wsaData;
 SOCKET sockU, sock_control;
 struct sockaddr_in server_addrU;
 int bytes_sentU, retU;
+float vadProbability = 0.0F;
+float getVadProbability() {
+  return vadProbability;
+}
 int netInitUDP(const char* host, int port) {
   sockU = INVALID_SOCKET;
 
@@ -353,7 +357,7 @@ int startMicPassthrough(int captureDev, int playbackDev) {
   playbackDevList[0] = playbackDev;
   spawnNewMiniaudioThread(0, 0, &captureDevList[0], &playbackDevList[0]);
   while (true) {
-    fprintf(stderr, "VAD: %.4f\n", vadProbability);
+    //fprintf(stderr, "VAD: %.4f\n", vadProbability);
     Sleep(500);
   }
   deinitAll();
