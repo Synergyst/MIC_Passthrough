@@ -110,7 +110,12 @@ namespace MicrophonePassthrough {
         private void checkedListBoxVirtMic_SelectedIndexChanged(object sender, EventArgs e) {
             //
         }
-        private void checkedListBoxRealMic_SelectedIndexChanged(object sender, EventArgs e) {
+        private void checkedListBoxRealMic_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //
+        }
+        private void checkedListBoxAuxMic_SelectedIndexChanged(object sender, EventArgs e)
+        {
             //
         }
         private void button2_Click_1(object sender, EventArgs e) {
