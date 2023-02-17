@@ -46,5 +46,29 @@ namespace MicrophonePassthrough.Properties {
                 this["CaptureDeviceID"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("ExamplePlay")]
+        public string PlaybackDeviceName {
+            get {
+                return ((string)(this["PlaybackDeviceName"]));
+            }
+            set {
+                this["PlaybackDeviceName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("ExampleCap")]
+        public string CaptureDeviceName {
+            get {
+                return ((string)(this["CaptureDeviceName"]));
+            }
+            set {
+                this["CaptureDeviceName"] = value;
+            }
+        }
     }
 }

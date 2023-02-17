@@ -8,5 +8,11 @@
     <Setting Name="CaptureDeviceID" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
+    <Setting Name="PlaybackDeviceName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">ExamplePlay</Value>
+    </Setting>
+    <Setting Name="CaptureDeviceName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">ExampleCap</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

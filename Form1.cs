@@ -15,7 +15,6 @@ namespace MicrophonePassthrough {
     public partial class Form1 : Form {
         public static bool actuallyClose = false;
         Thread micThr;
-        Thread restartThr;
         public Form1() {
             InitializeComponent();
             this.FormClosing += (s, e) => {
@@ -26,7 +25,6 @@ namespace MicrophonePassthrough {
                     this.Hide();
                     e.Cancel = true;
                 } else {
-                    dontRun();
                     notifyIcon1.Visible = false;
                     System.Threading.Thread.Sleep(1250);
                     Environment.Exit(0);
@@ -37,13 +35,15 @@ namespace MicrophonePassthrough {
         unsafe static extern int startMicPassthrough(int captureDev, int playbackDev);
         [System.Runtime.InteropServices.DllImport("MIC_Passthrough.dll")]
         unsafe static extern int retDevNameList(StringBuilder playbackCount, StringBuilder captureCount, StringBuilder playbackListGUI, StringBuilder captureListGUI, int len);
-         [System.Runtime.InteropServices.DllImport("MIC_Passthrough.dll")]
+        /*[System.Runtime.InteropServices.DllImport("MIC_Passthrough.dll")]
         unsafe static extern int dontRun();
         [System.Runtime.InteropServices.DllImport("MIC_Passthrough.dll")]
         unsafe static extern int shallRun();
         [System.Runtime.InteropServices.DllImport("MIC_Passthrough.dll")]
         unsafe static extern int getRunStatus();
-        /*[System.Runtime.InteropServices.DllImport("MIC_Passthrough.dll")]
+        [System.Runtime.InteropServices.DllImport("MIC_Passthrough.dll")]
+        unsafe static extern int deinitAll();
+        [System.Runtime.InteropServices.DllImport("MIC_Passthrough.dll")]
         unsafe static extern int sendNetMsg();*/
         private static bool firstRun1 = true;
         private static bool firstRun2 = true;
@@ -88,28 +88,15 @@ namespace MicrophonePassthrough {
             micThr = new Thread(micFunc);
             micThr.IsBackground = true;
             micThr.Start();
-            restartThr = new Thread(restartFunc);
-            restartThr.IsBackground = true;
-            restartThr.Start();
-        }
-        private static void restartFunc() {
-            while (true) {
-                shallRun();
-                System.Threading.Thread.Sleep(5000);
-                //sendNetMsg();
-                dontRun();
-            }
         }
         private static void micFunc() {
-            Console.WriteLine("Launching with [capture ID : playback ID]: " + Properties.Settings.Default.CaptureDeviceID.ToString() + " : " + Properties.Settings.Default.PlaybackDeviceID.ToString());
             while (true) {
+                Console.WriteLine("Launching with [capture ID : playback ID]: " + Properties.Settings.Default.CaptureDeviceID.ToString() + " : " + Properties.Settings.Default.PlaybackDeviceID.ToString());
                 startMicPassthrough(Properties.Settings.Default.CaptureDeviceID, Properties.Settings.Default.PlaybackDeviceID);
                 //startMicPassthrough(1, 0);
-                Console.WriteLine("Restarting.. for his pleasure..");
             }
         }
         private void button2_Click(object sender, EventArgs e) {
-            dontRun();
             System.Threading.Thread.Sleep(1250);
             Environment.Exit(0);
             for (int x = 0; x < Application.OpenForms.Count; x++) {
@@ -120,7 +107,6 @@ namespace MicrophonePassthrough {
             this.Close();
         }
         private void button3_Click(object sender, EventArgs e) {
-            dontRun();
             System.Threading.Thread.Sleep(1250);
             Environment.Exit(0);
         }

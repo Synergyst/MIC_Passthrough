@@ -45,22 +45,19 @@ EXPORT int dontRun();
 EXPORT int shallRun();
 EXPORT int getRunStatus();
 EXPORT int retDevNameList(char* playbackCount, char* captureCount, char* playbackListGUI, char* captureListGUI, int len);
+EXPORT void deinitAll();
 WSADATA wsaData;
-SOCKET sock;
-struct sockaddr_in server_addr;
-int bytes_sent, ret;
-WSADATA wsaDataU;
-SOCKET sockU;
-struct sockaddr_in server_addrU;
-int bytes_sentU, retU;
-int netInitTCP(const char* host, int port) {
+SOCKET sockT, sockU, sock_control;
+struct sockaddr_in server_addrT, server_addrU, server_addr_control;
+int bytes_sentT, retT, bytes_sentU, retU, bytes_sent_control, ret_control;
+int netInitTCP(const char* host, int port, SOCKET sock, struct sockaddr_in server_addr, int ret) {
   sock = INVALID_SOCKET;
 
   // Initialize Winsock
   ret = WSAStartup(MAKEWORD(2, 2), &wsaData);
   if (ret != 0) {
     printf("WSAStartup failed with error: %d\n", ret);
-    return -1;
+    exit(1);
   }
 
   // Create a TCP socket
@@ -68,7 +65,7 @@ int netInitTCP(const char* host, int port) {
   if (sock == INVALID_SOCKET) {
     printf("socket failed with error: %ld\n", WSAGetLastError());
     WSACleanup();
-    return -1;
+    exit(1);
   }
 
   // Set server address
@@ -82,11 +79,11 @@ int netInitTCP(const char* host, int port) {
     printf("connect failed with error: %d\n", WSAGetLastError());
     closesocket(sock);
     WSACleanup();
-    return -1;
+    exit(1);
   }
   return 0;
 }
-int netSendTCP(void* frame, int frameSize) {
+int netSendTCP(void* frame, int frameSize, SOCKET sock, int bytes_sent) {
   bytes_sent = send(sock, (const char*)frame, frameSize, 0);
   if (bytes_sent == SOCKET_ERROR) {
     printf("send failed with error: %d\n", WSAGetLastError());
@@ -96,7 +93,7 @@ int netSendTCP(void* frame, int frameSize) {
   }
   return 0;
 }
-int netRecvTCP(void* frame, int frameSize) {
+int netRecvTCP(void* frame, int frameSize, SOCKET sock, int ret) {
   // Receive response
   ret = recv(sock, frame, frameSize, 0);
   if (ret == SOCKET_ERROR) {
@@ -107,11 +104,17 @@ int netRecvTCP(void* frame, int frameSize) {
   }
   return 0;
 }
+int netDeinitTCP(SOCKET sock) {
+  // Clean up
+  closesocket(sock);
+  WSACleanup();
+  return 0;
+}
 int netInitUDP(const char* host, int port) {
   sockU = INVALID_SOCKET;
 
   // Initialize Winsock
-  retU = WSAStartup(MAKEWORD(2, 2), &wsaDataU);
+  retU = WSAStartup(MAKEWORD(2, 2), &wsaData);
   if (retU != 0) {
     printf("WSAStartup failed with error: %d\n", retU);
     return -1;
@@ -151,13 +154,7 @@ int netRecvUDP(void* frame, int frameSize) {
   }
   return 0;
 }
-int netDeinit() {
-  // Clean up
-  closesocket(sock);
-  WSACleanup();
-  return 0;
-}
-int netDeinitU() {
+int netDeinitUDP() {
   // Clean up
   closesocket(sockU);
   WSACleanup();
@@ -168,15 +165,18 @@ void *data_callback(ma_device* pDevice, void* pOutput, const void* pInput, ma_ui
     short* pInputS16 = (short*)pInput;
     float* tempOut = calloc(frameCount * sizeof(float), sizeof(float));
     short* tempIn = calloc(frameCount * sizeof(short), sizeof(short));
+    unsigned char* netOut = calloc(frameCount * sizeof(unsigned char), sizeof(unsigned char));
     for (int i = 0; i < frameCount; i++) tempOut[i] = pInputS16[i];
     //float fadeMultiplier = 1.0F, vadThreshold = 0.05F;
     float vadProbability = rnnoise_process_frame(st[0], tempOut, tempOut);
     for (int i = 0; i < frameCount; i++) tempIn[i] = tempOut[i];
     ma_convert_pcm_frames_format(pOutput, ma_format_s16, tempIn, ma_format_s16, (frameCount), 1, ma_dither_mode_none);
-    //netSendTCP(tempIn, frameCount * sizeof(short));
-    netSendUDP(tempIn, frameCount * sizeof(short));
+    ma_convert_pcm_frames_format(netOut, ma_format_u8, tempIn, ma_format_s16, (frameCount), 1, ma_dither_mode_none);
+    netSendUDP(netOut, frameCount * sizeof(unsigned char));
+    //netSendTCP(netOut, frameCount * sizeof(unsigned char), sockT, bytes_sentT);
     //netSendTCP(tempIn, frameCount * sizeof(short), 1);
     //netSendUDP(tempIn, frameCount * sizeof(short), 1);
+    free(netOut);
     free(tempIn);
     free(tempOut);
   } else {
@@ -461,11 +461,10 @@ void deinitAll() {
   ma_device_uninit(&device[0]);
   rnnoise_destroy(st[0]);
   shallRun();
-  //netDeinit();
-  netDeinitU();
 }
 int startMicPassthrough(int captureDev, int playbackDev) {
-  //netInitTCP("192.168.168.170", 2224);
+  //netInitTCP("127.0.0.1", 2224, sockT, server_addrT, retT);
+  //netInitTCP("127.0.0.1", 2225, sock_control, server_addr_control, ret_control);
   netInitUDP("192.168.168.170", 2224);
   //netInitTCP("192.168.168.170", 2225, 1);
   //netInitUDP(ipAddr, portNum, 1);
@@ -477,9 +476,11 @@ int startMicPassthrough(int captureDev, int playbackDev) {
   playbackDevList[0] = playbackDev;
   spawnNewMiniaudioThread(0, 0, &captureDevList[0], &playbackDevList[0]);
   while (doRun) {
-    // Do nothing, which is the normal procedure..
-      Sleep(50000);
+    Sleep(5000000);
   }
   deinitAll();
+  //netDeinitTCP(sockT);
+  //netDeinitTCP(sock_control);
+  netDeinitUDP();
   return 0;
 }
