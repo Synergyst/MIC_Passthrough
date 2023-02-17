@@ -35,16 +35,6 @@ namespace MicrophonePassthrough {
         unsafe static extern int startMicPassthrough(int captureDev, int playbackDev);
         [System.Runtime.InteropServices.DllImport("MIC_Passthrough.dll")]
         unsafe static extern int retDevNameList(StringBuilder playbackCount, StringBuilder captureCount, StringBuilder playbackListGUI, StringBuilder captureListGUI, int len);
-        /*[System.Runtime.InteropServices.DllImport("MIC_Passthrough.dll")]
-        unsafe static extern int dontRun();
-        [System.Runtime.InteropServices.DllImport("MIC_Passthrough.dll")]
-        unsafe static extern int shallRun();
-        [System.Runtime.InteropServices.DllImport("MIC_Passthrough.dll")]
-        unsafe static extern int getRunStatus();
-        [System.Runtime.InteropServices.DllImport("MIC_Passthrough.dll")]
-        unsafe static extern int deinitAll();
-        [System.Runtime.InteropServices.DllImport("MIC_Passthrough.dll")]
-        unsafe static extern int sendNetMsg();*/
         private static bool firstRun1 = true;
         private static bool firstRun2 = true;
         private void button1_Click_1(object sender, EventArgs e) {

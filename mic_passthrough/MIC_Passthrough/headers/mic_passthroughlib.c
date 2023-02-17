@@ -1,5 +1,5 @@
 #define _CRT_SECURE_NO_WARNINGS
-#define MA_DEBUG_OUTPUT
+//#define MA_DEBUG_OUTPUT
 #define MINIAUDIO_IMPLEMENTATION
 #define SAMPLE_RATE 48000
 #define CHANNEL_COUNT 1
@@ -39,77 +39,14 @@ ma_device_info **pCaptureDeviceInfos;
 ma_uint32 *playbackDeviceCount, *captureDeviceCount;
 int *captureDevList;
 int *playbackDevList;
-bool doRun = true;
+float vadProbability;
 EXPORT int startMicPassthrough(int, int);
-EXPORT int dontRun();
-EXPORT int shallRun();
-EXPORT int getRunStatus();
 EXPORT int retDevNameList(char* playbackCount, char* captureCount, char* playbackListGUI, char* captureListGUI, int len);
 EXPORT void deinitAll();
 WSADATA wsaData;
-SOCKET sockT, sockU, sock_control;
-struct sockaddr_in server_addrT, server_addrU, server_addr_control;
-int bytes_sentT, retT, bytes_sentU, retU, bytes_sent_control, ret_control;
-int netInitTCP(const char* host, int port, SOCKET sock, struct sockaddr_in server_addr, int ret) {
-  sock = INVALID_SOCKET;
-
-  // Initialize Winsock
-  ret = WSAStartup(MAKEWORD(2, 2), &wsaData);
-  if (ret != 0) {
-    printf("WSAStartup failed with error: %d\n", ret);
-    exit(1);
-  }
-
-  // Create a TCP socket
-  sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-  if (sock == INVALID_SOCKET) {
-    printf("socket failed with error: %ld\n", WSAGetLastError());
-    WSACleanup();
-    exit(1);
-  }
-
-  // Set server address
-  server_addr.sin_family = AF_INET;
-  server_addr.sin_port = htons(port);
-  server_addr.sin_addr.s_addr = inet_addr(host);
-
-  // Connect to server
-  ret = connect(sock, (struct sockaddr*)&server_addr, sizeof(server_addr));
-  if (ret == SOCKET_ERROR) {
-    printf("connect failed with error: %d\n", WSAGetLastError());
-    closesocket(sock);
-    WSACleanup();
-    exit(1);
-  }
-  return 0;
-}
-int netSendTCP(void* frame, int frameSize, SOCKET sock, int bytes_sent) {
-  bytes_sent = send(sock, (const char*)frame, frameSize, 0);
-  if (bytes_sent == SOCKET_ERROR) {
-    printf("send failed with error: %d\n", WSAGetLastError());
-    closesocket(sock);
-    WSACleanup();
-    return -1;
-  }
-  return 0;
-}
-int netRecvTCP(void* frame, int frameSize, SOCKET sock, int ret) {
-  // Receive response
-  ret = recv(sock, frame, frameSize, 0);
-  if (ret == SOCKET_ERROR) {
-    printf("recv failed with error: %d\n", WSAGetLastError());
-    closesocket(sock);
-    WSACleanup();
-    return -1;
-  }
-  return 0;
-}
-int netDeinitTCP(SOCKET sock) {
-  // Clean up
-  closesocket(sock);
-  WSACleanup();
-  return 0;
-}
+SOCKET sockU, sock_control;
+struct sockaddr_in server_addrU;
+int bytes_sentU, retU;
 int netInitUDP(const char* host, int port) {
   sockU = INVALID_SOCKET;
 
@@ -160,7 +97,7 @@ int netDeinitUDP() {
   WSACleanup();
   return 0;
 }
-void *data_callback(ma_device* pDevice, void* pOutput, const void* pInput, ma_uint32 frameCount) {
+float noiseReductionProcessor(ma_device* pDevice, void* pOutput, const void* pInput, ma_uint32 frameCount) {
   if (st[0]) {
     short* pInputS16 = (short*)pInput;
     float* tempOut = calloc(frameCount * sizeof(float), sizeof(float));
@@ -168,20 +105,22 @@ void *data_callback(ma_device* pDevice, void* pOutput, const void* pInput, ma_ui
     unsigned char* netOut = calloc(frameCount * sizeof(unsigned char), sizeof(unsigned char));
     for (int i = 0; i < frameCount; i++) tempOut[i] = pInputS16[i];
     //float fadeMultiplier = 1.0F, vadThreshold = 0.05F;
-    float vadProbability = rnnoise_process_frame(st[0], tempOut, tempOut);
+    float vadProb = rnnoise_process_frame(st[0], tempOut, tempOut);
     for (int i = 0; i < frameCount; i++) tempIn[i] = tempOut[i];
     ma_convert_pcm_frames_format(pOutput, ma_format_s16, tempIn, ma_format_s16, (frameCount), 1, ma_dither_mode_none);
     ma_convert_pcm_frames_format(netOut, ma_format_u8, tempIn, ma_format_s16, (frameCount), 1, ma_dither_mode_none);
     netSendUDP(netOut, frameCount * sizeof(unsigned char));
-    //netSendTCP(netOut, frameCount * sizeof(unsigned char), sockT, bytes_sentT);
-    //netSendTCP(tempIn, frameCount * sizeof(short), 1);
-    //netSendUDP(tempIn, frameCount * sizeof(short), 1);
     free(netOut);
     free(tempIn);
     free(tempOut);
+    return vadProb;
   } else {
     printf("RNNoise = NULL!\n");
+    exit(1);
   }
+}
+void *data_callback(ma_device* pDevice, void* pOutput, const void* pInput, ma_uint32 frameCount) {
+  vadProbability = noiseReductionProcessor(pDevice, pOutput, pInput, frameCount);
 }
 void initSoundHardwareVars(int initCaptureDeviceCount, int initPlaybackDeviceCount) {
   // TODO: allow for definition of independent capture/playback device counts
@@ -192,14 +131,11 @@ void initSoundHardwareVars(int initCaptureDeviceCount, int initPlaybackDeviceCou
   captureDeviceCount = (ma_uint32*)calloc(initCaptureDeviceCount, sizeof(ma_uint32));
   playbackDeviceCount = (ma_uint32*)calloc(initPlaybackDeviceCount, sizeof(ma_uint32));
   for (int i = 0; i < initCaptureDeviceCount; i++) {
-    //printf("Assigning: -1 to capture index [%d]\n", i);
     captureDevList[i] = -1;
   }
   for (int i = 0; i < initPlaybackDeviceCount; i++) {
-    //printf("Assigning: -1 to capture index [%d]\n", i);
     playbackDevList[i] = -1;
   }
-  //printf("Initialized %d capture and %d playback device array(s)..\n", initCaptureDeviceCount, initPlaybackDeviceCount);
 }
 void log_callback(ma_context* pContext, ma_device* pDevice, ma_uint32 logLevel, const char* message) {
   (void)pContext;
@@ -219,10 +155,7 @@ bool isCaptureSoundDevAutoDetectable(int devEnum, int deviceCount, int threadInd
   if (strstr(currCapDevName, "AT2020USB+") != NULL) {
     printf("Auto-detected [REAL] microphone device ID: [%d] \"%s\"\n", devEnum, currCapDevName);
     return true;
-  } /*else if (strstr(currCapDevName, "Line (MG-XU)") != NULL) {
-    printf("Auto-detected [REAL] microphone device ID: [%d] \"%s\"\n", devEnum, currCapDevName);
-    return true;
-  }*/ else if (strstr(currCapDevName, "Microphone (Blue Snowball)") != NULL) {
+  } else if (strstr(currCapDevName, "Microphone (Blue Snowball)") != NULL) {
     printf("Auto-detected [REAL] microphone device ID: [%d] \"%s\"\n", devEnum, currCapDevName);
     return true;
   } else if (strstr(currCapDevName, "Line In (High Definition Audio Device)") != NULL) {
@@ -246,9 +179,6 @@ bool isPlaybackSoundDevAutoDetectable(int devEnum, int deviceCount, int threadIn
   } else if (strstr(currPlayDevName, "Speakers (Sonics Virtual Audio Device (Wave Extensible) (WDM))") != NULL) {
     printf("Auto-detected [VIRTUAL] microphone ID: [%d] \"%s\"\n", devEnum, currPlayDevName);
     return true;
-  /*} else if (strstr(currPlayDevName, "Speakers (High Definition Audio Device)") != NULL) {
-    printf("Auto-detected [VIRTUAL] microphone ID: [%d] \"%s\"\n", devEnum, currPlayDevName);
-    return true;*/
   } else if (strstr(currPlayDevName, "Line (MG-XU)") != NULL) {
     printf("Auto-detected [VIRTUAL] microphone ID: [%d] \"%s\"\n", devEnum, currPlayDevName);
     return true;
@@ -258,12 +188,10 @@ bool isPlaybackSoundDevAutoDetectable(int devEnum, int deviceCount, int threadIn
 }
 int initSound(bool isFromHelpPrompt, int **realmicDeviceId, int **virtmicDeviceId, int threadIndex) {
   ma_uint32 iDevice;
-  //ma_backend backend = ma_backend_alsa;
   ma_backend backend = ma_backend_wasapi;
   //backendRealMic = ma_backend_winmm;
   //backendRealMic = ma_backend_dsound;
   contextConfig[threadIndex] = ma_context_config_init();
-  //contextConfig[threadIndex].logCallback = log_callback;
   contextConfig[threadIndex].threadPriority = ma_thread_priority_realtime;
 
   ma_result result = ma_context_init(&backend, 1, &contextConfig[threadIndex], &context[threadIndex]);
@@ -307,7 +235,6 @@ int initSound(bool isFromHelpPrompt, int **realmicDeviceId, int **virtmicDeviceI
   if (**realmicDeviceId >= captureDeviceCount[threadIndex] || **realmicDeviceId < 0) {
     for (iDevice = 0; iDevice < captureDeviceCount[threadIndex]; ++iDevice) {
       if (**realmicDeviceId == -1) {
-        //printf("Checking [microphone]: %s\n", pCaptureDeviceInfos[threadIndex][iDevice].name);
         if (isCaptureSoundDevAutoDetectable(iDevice, captureDeviceCount[threadIndex], threadIndex)) {
           **realmicDeviceId = iDevice;
           iDevice = captureDeviceCount[threadIndex] * 2;
@@ -322,7 +249,6 @@ int initSound(bool isFromHelpPrompt, int **realmicDeviceId, int **virtmicDeviceI
   if (**virtmicDeviceId >= playbackDeviceCount[threadIndex] || **virtmicDeviceId < 0) {
     for (iDevice = 0; iDevice < playbackDeviceCount[threadIndex]; ++iDevice) {
       if (**virtmicDeviceId == -1) {
-        //printf("Checking [playback]: %s\n", pPlaybackDeviceInfos[threadIndex][iDevice].name);
         if (isPlaybackSoundDevAutoDetectable(iDevice, captureDeviceCount[threadIndex], threadIndex)) {
           **virtmicDeviceId = iDevice;
           iDevice = playbackDeviceCount[threadIndex] * 2;
@@ -337,13 +263,10 @@ int initSound(bool isFromHelpPrompt, int **realmicDeviceId, int **virtmicDeviceI
   return 0;
 }
 int spawnNewMiniaudioThread(int threadIndex, int deviceMode, int *realmicDeviceId, int *virtmicDeviceId) {
-  //initSoundHardwareVars(1, 1);
   assert(threadIndex < MAX_MINIAUDIO_THREADS && threadIndex > -1);
   assert(deviceMode <= 3 && deviceMode > -1);
-  /*st[threadIndex] = rnnoise_create(NULL);*/
+  //st[threadIndex] = rnnoise_create(NULL);
   st[threadIndex] = rnnoise_create(&rnnoise_model_orig);
-  //st[threadIndex] = rnnoise_create(&rnnoise_model_5h_b_500k);
-  //st[threadIndex] = rnnoise_create(&rnnoise_model_5h_ru_500k);
   if (initSound(true, &realmicDeviceId, &virtmicDeviceId, threadIndex)) {
     printf("FATAL: Error initializing sound devices..\n");
     return -1;
@@ -361,21 +284,11 @@ int spawnNewMiniaudioThread(int threadIndex, int deviceMode, int *realmicDeviceI
       deviceConfig[threadIndex].playback.channels = CHANNEL_COUNT;
       deviceConfig[threadIndex].playback.shareMode = ma_share_mode_shared;
       deviceConfig[threadIndex].sampleRate = SAMPLE_RATE;
-      //deviceConfig[threadIndex].periodSizeInFrames = 1920;
-      //deviceConfig[threadIndex].periodSizeInMilliseconds = 10;
-      //deviceConfig[threadIndex].periods = 3;
-      //deviceConfig[threadIndex].dataCallback = callbackFuncArr[threadIndex];
       deviceConfig[threadIndex].dataCallback = &data_callback;
-      /*realFrameCount = deviceConfig[threadIndex].periodSizeInMilliseconds * (deviceConfig[threadIndex].sampleRate / 1000);
-      sizeOfAudioFrame = (realFrameCount * ma_get_bytes_per_frame(deviceConfig[threadIndex].playback.format, deviceConfig[threadIndex].playback.channels));
-      fftFrameCnt = (realFrameCount + nbits);
-      numSampleCnt = (realFrameCount * deviceConfig[threadIndex].playback.channels);
-      printf("realFrameCount: %d\nsizeOfAudioFrame: %d\n", realFrameCount, sizeOfAudioFrame);*/
       break;
     default:
       break;
   }
-  //deviceConfig[threadIndex].noPreZeroedOutputBuffer = false;
   deviceConfig[threadIndex].stopCallback = stop_callback;
 
   ma_result resultDevEnum = ma_device_init(&context[threadIndex], &deviceConfig[threadIndex], &device[threadIndex]);
@@ -384,7 +297,6 @@ int spawnNewMiniaudioThread(int threadIndex, int deviceMode, int *realmicDeviceI
     printf("DEBUG: %s\n", ma_result_description(resultDevEnum));
     return -1;
   }
-  //printf("DEBUG: %s\n", ma_result_description(resultDevEnum));
 
   Sleep(100);
   ma_result devStartRes = ma_device_start(&device[threadIndex]);
@@ -392,37 +304,7 @@ int spawnNewMiniaudioThread(int threadIndex, int deviceMode, int *realmicDeviceI
     printf("FATAL: Error starting engine..\n");
     return -1;
   }
-  //printf("DEBUG: %s\n", ma_result_description(devStartRes));
-
-  /*ma_channel_converter_config config = ma_channel_converter_config_init(
-    ma_format_f32,                      // Sample format
-    1,                              // Input channels
-    NULL,                           // Input channel map
-    1,                              // Output channels
-    NULL,                           // Output channel map
-    ma_channel_mix_mode_default);   // The mixing algorithm to use when combining channels.
-
-  ma_result result = ma_channel_converter_init(&config, &converter);
-  if (result != MA_SUCCESS) {
-    // Error.
-    printf("FATAL: Error initializing converter..\n");
-    printf("DEBUG: %s\n", ma_result_description(resultDevEnum));
-    return -1;
-  }*/
-
   return 0;
-}
-int dontRun() {
-  doRun = false;
-  return 0;
-}
-int shallRun() {
-  doRun = true;
-  return 1;
-}
-int getRunStatus() {
-  int runStatusCode = doRun;
-  return runStatusCode;
 }
 size_t allocated_size(void* ptr) {
   return ((size_t*)ptr)[-1];
@@ -460,27 +342,20 @@ int retDevNameList(char* playbackCount, char* captureCount, char* playbackListGU
 void deinitAll() {
   ma_device_uninit(&device[0]);
   rnnoise_destroy(st[0]);
-  shallRun();
+  netDeinitUDP();
 }
 int startMicPassthrough(int captureDev, int playbackDev) {
-  //netInitTCP("127.0.0.1", 2224, sockT, server_addrT, retT);
-  //netInitTCP("127.0.0.1", 2225, sock_control, server_addr_control, ret_control);
   netInitUDP("192.168.168.170", 2224);
-  //netInitTCP("192.168.168.170", 2225, 1);
-  //netInitUDP(ipAddr, portNum, 1);
-  //captureDev = 1, playbackDev = 1;
   int captureDevListCnt = 1;
   int playbackDevListCnt = 1;
   initSoundHardwareVars(captureDevListCnt, playbackDevListCnt);
   captureDevList[0] = captureDev;
   playbackDevList[0] = playbackDev;
   spawnNewMiniaudioThread(0, 0, &captureDevList[0], &playbackDevList[0]);
-  while (doRun) {
-    Sleep(5000000);
+  while (true) {
+    fprintf(stderr, "VAD: %.4f\n", vadProbability);
+    Sleep(500);
   }
   deinitAll();
-  //netDeinitTCP(sockT);
-  //netDeinitTCP(sock_control);
-  netDeinitUDP();
   return 0;
 }
