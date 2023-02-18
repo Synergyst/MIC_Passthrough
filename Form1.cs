@@ -14,7 +14,7 @@ using System.Runtime.InteropServices;
 namespace MicrophonePassthrough {
     public partial class Form1 : Form {
         public static bool actuallyClose = false;
-        Thread micThr;
+        Thread micThr, micThrNet;
         public Form1() {
             InitializeComponent();
             this.FormClosing += (s, e) => {
@@ -39,8 +39,18 @@ namespace MicrophonePassthrough {
         unsafe static extern float getVadProbability();
         [System.Runtime.InteropServices.DllImport("MIC_Passthrough.dll")]
         unsafe static extern float getDecibel();
-        [System.Runtime.InteropServices.DllImport("MIC_Passthrough.dll")]
-        unsafe static extern float getAmplitude();
+        /*[System.Runtime.InteropServices.DllImport("MIC_Passthrough.dll")]
+        unsafe static extern float getAmplitude();*/
+        [System.Runtime.InteropServices.DllImport("MIC_Passthrough_Net.dll")]
+        unsafe static extern int startMicPassthrough_net(int captureDev, int playbackDev);
+        /*[System.Runtime.InteropServices.DllImport("MIC_Passthrough_Net.dll")]
+        unsafe static extern int retDevNameList_net(StringBuilder playbackCount, StringBuilder captureCount, StringBuilder playbackListGUI, StringBuilder captureListGUI, int len);*/
+        [System.Runtime.InteropServices.DllImport("MIC_Passthrough_Net.dll")]
+        unsafe static extern float getVadProbability_net();
+        [System.Runtime.InteropServices.DllImport("MIC_Passthrough_Net.dll")]
+        unsafe static extern float getDecibel_net();
+        /*[System.Runtime.InteropServices.DllImport("MIC_Passthrough_Net.dll")]
+        unsafe static extern float getAmplitude_net();*/
         private static bool firstRun1 = true;
         private static bool firstRun2 = true;
         private void button1_Click_1(object sender, EventArgs e) {
@@ -53,6 +63,7 @@ namespace MicrophonePassthrough {
             string[] captureList = capMsgList.ToString().Split('\n');
             for (int i = 0; i < Convert.ToInt32(playMsg.ToString()); i++) checkedListBoxVirtMic.Items.Add("[" + i + "]: " + playbackList[i]);
             for (int i = 0; i < Convert.ToInt32(capMsg.ToString()); i++) checkedListBoxRealMic.Items.Add("[" + i + "]: " + captureList[i]);
+            for (int i = 0; i < Convert.ToInt32(playMsg.ToString()); i++) checkedListBoxAuxMic.Items.Add("[" + i + "]: " + playbackList[i]);
             bool resetSettings = false;
             if (firstRun1 == true) {
                 if (resetSettings) {
@@ -61,6 +72,8 @@ namespace MicrophonePassthrough {
                 }
                 checkedListBoxVirtMic.SetItemChecked(Properties.Settings.Default.PlaybackDeviceID, true);
                 this.checkedListBoxVirtMic.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.checkedListBoxVirtMic_ItemCheck);
+                checkedListBoxAuxMic.SetItemChecked(Properties.Settings.Default.PlaybackDeviceID, true);
+                this.checkedListBoxAuxMic.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.checkedListBoxAuxMic_ItemCheck);
             } else {
                 firstRun1 = false;
             }
@@ -85,6 +98,18 @@ namespace MicrophonePassthrough {
                 //startMicPassthrough(1, 0);
             }
         }
+        private void button4_Click(object sender, EventArgs e) {
+            micThrNet = new Thread(micFunc_net);
+            micThrNet.IsBackground = true;
+            micThrNet.Start();
+        }
+        private static void micFunc_net() {
+            while (true) {
+                Console.WriteLine("Launching network with [playback ID]: " + Properties.Settings.Default.PlaybackDeviceID.ToString());
+                //startMicPassthrough_net(0, Properties.Settings.Default.PlaybackDeviceID);
+                startMicPassthrough_net(3, 5);
+            }
+        }
         private void button2_Click(object sender, EventArgs e) {
             System.Threading.Thread.Sleep(1250);
             Environment.Exit(0);
@@ -98,6 +123,12 @@ namespace MicrophonePassthrough {
         private void button3_Click(object sender, EventArgs e) {
             System.Threading.Thread.Sleep(1250);
             Environment.Exit(0);
+        }
+        private void checkedListBoxAuxMic_ItemCheck(object sender, ItemCheckEventArgs e) {
+            for (int ix = 0; ix < checkedListBoxAuxMic.Items.Count; ++ix)
+                if (ix != e.Index) checkedListBoxAuxMic.SetItemChecked(ix, false);
+            Properties.Settings.Default.PlaybackDeviceID = checkedListBoxAuxMic.Items.IndexOf(checkedListBoxAuxMic.SelectedItem.ToString());
+            Console.WriteLine(Properties.Settings.Default.PlaybackDeviceID);
         }
         private void checkedListBoxVirtMic_ItemCheck(object sender, ItemCheckEventArgs e) {
             for (int ix = 0; ix < checkedListBoxVirtMic.Items.Count; ++ix)
@@ -114,12 +145,10 @@ namespace MicrophonePassthrough {
         private void checkedListBoxVirtMic_SelectedIndexChanged(object sender, EventArgs e) {
             //
         }
-        private void checkedListBoxRealMic_SelectedIndexChanged(object sender, EventArgs e)
-        {
+        private void checkedListBoxRealMic_SelectedIndexChanged(object sender, EventArgs e) {
             //
         }
-        private void checkedListBoxAuxMic_SelectedIndexChanged(object sender, EventArgs e)
-        {
+        private void checkedListBoxAuxMic_SelectedIndexChanged(object sender, EventArgs e) {
             //
         }
         private void button2_Click_1(object sender, EventArgs e) {
@@ -133,32 +162,47 @@ namespace MicrophonePassthrough {
         private void Form1_Load(object sender, EventArgs e) {
             //
         }
-
         private void timer1_Tick(object sender, EventArgs e) {
             int vadProb = (int)(getVadProbability() * 1000.0F);
             progressBar1.Value = vadProb;
             progressBar1.Refresh();
         }
 
-        private void timer2_Tick(object sender, EventArgs e)
-        {
+        private void timer3_Tick(object sender, EventArgs e) {
+            int vadProb = (int)(getVadProbability_net() * 1000.0F);
+            progressBar3.Value = vadProb;
+            progressBar3.Refresh();
+        }
+
+        private void timer4_Tick(object sender, EventArgs e) {
+            int decibelLevel = (int)((getDecibel_net() + 60.0F) * 1.6667F);
+            var decibelLevelStr = decibelLevel.ToString();
+            if (decibelLevel > 0) {
+                progressBar4.Value = decibelLevel;
+                progressBar4.Refresh();
+            } else {
+                if (progressBar4.Value > 0) {
+                    progressBar4.Value = progressBar4.Value - 1;
+                    progressBar4.Refresh();
+                }
+            }
+        }
+
+        private void timer2_Tick(object sender, EventArgs e) {
             /*int amplitudeLevel = (int)(get_average_amplitude() * 10000.0F);
             progressBar2.Value = amplitudeLevel;
             progressBar2.Refresh();
             Console.WriteLine(amplitudeLevel.ToString());*/
             int decibelLevel = (int)((getDecibel() + 60.0F) * 1.6667F);
             var decibelLevelStr = decibelLevel.ToString();
-            if (decibelLevelStr != "-8" && decibelLevelStr != "0" && decibelLevelStr != "-2147483648")
-            {
-                //Console.WriteLine(decibelLevelStr);
-            }
-            if (decibelLevel > 0)
-            {
+            /*if (decibelLevelStr != "-8" && decibelLevelStr != "0" && decibelLevelStr != "-2147483648") {
+                Console.WriteLine(decibelLevelStr);
+            }*/
+            if (decibelLevel > 0) {
                 progressBar2.Value = decibelLevel;
                 progressBar2.Refresh();
             } else {
-                if (progressBar2.Value > 0)
-                {
+                if (progressBar2.Value > 0) {
                     progressBar2.Value = progressBar2.Value - 1;
                     progressBar2.Refresh();
                 }
