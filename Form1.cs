@@ -182,52 +182,48 @@ namespace MicrophonePassthrough {
             progressBar3.Value = vadProb;
             progressBar3.Refresh();
         }
-
         private void timer4_Tick(object sender, EventArgs e) {
-            int decibelLevel = (int)((getDecibel_net() + 60.0F) * 1.6667F);
-            var decibelLevelStr = decibelLevel.ToString();
-            if (decibelLevel > 0) {
-                progressBar4.Value = decibelLevel;
+            if (!transmitState_net()) {
+                int decibelLevel = (int)((getDecibel_net() + 60.0F) * 1.6667F);
+                var decibelLevelStr = decibelLevel.ToString();
+                if (decibelLevel > 0) {
+                    progressBar4.Value = decibelLevel;
+                } else {
+                    if (progressBar4.Value > 0) {
+                        progressBar4.Value = progressBar4.Value - 1;
+                    }
+                }
                 progressBar4.Refresh();
             } else {
-                if (progressBar4.Value > 0) {
-                    progressBar4.Value = progressBar4.Value - 1;
-                    progressBar4.Refresh();
-                }
+                progressBar4.Value = 0;
             }
         }
-
         private void timer5_Tick(object sender, EventArgs e) {
             if (transmitState()) {
                 pictureBox1.Image = Resources.micpassthrough;
             } else {
                 pictureBox1.Image = Resources.micpassthroughmuted;
             }
-            if (transmitState_net()) {
+            if (!transmitState_net()) {
                 pictureBox2.Image = Resources.micpassthrough;
             } else {
                 pictureBox2.Image = Resources.micpassthroughmuted;
             }
         }
-
         private void timer2_Tick(object sender, EventArgs e) {
-            /*int amplitudeLevel = (int)(get_average_amplitude() * 10000.0F);
-            progressBar2.Value = amplitudeLevel;
-            progressBar2.Refresh();
-            Console.WriteLine(amplitudeLevel.ToString());*/
-            int decibelLevel = (int)((getDecibel() + 60.0F) * 1.6667F);
-            var decibelLevelStr = decibelLevel.ToString();
-            /*if (decibelLevelStr != "-8" && decibelLevelStr != "0" && decibelLevelStr != "-2147483648") {
-                Console.WriteLine(decibelLevelStr);
-            }*/
-            if (decibelLevel > 0) {
-                progressBar2.Value = decibelLevel;
+            if (transmitState()) {
+                int decibelLevel = (int)((getDecibel() + 60.0F) * 1.6667F);
+                var decibelLevelStr = decibelLevel.ToString();
+                if (decibelLevel > 0) {
+                    progressBar2.Value = decibelLevel;
+                } else {
+                    if (progressBar2.Value > 0) {
+                        progressBar2.Value = progressBar2.Value - 1;
+                    }
+                }
                 progressBar2.Refresh();
             } else {
-                if (progressBar2.Value > 0) {
-                    progressBar2.Value = progressBar2.Value - 1;
-                    progressBar2.Refresh();
-                }
+                progressBar2.Value = 0;
             }
             //Console.WriteLine(decibelLevel.ToString());
         }

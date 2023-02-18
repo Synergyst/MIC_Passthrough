@@ -54,7 +54,7 @@ struct sockaddr_in server_addrU;
 int bytes_sentU, retU;
 float vadProbability = 0.0F, dB_avg = 0.0F, ampl_avg = 0.0F;
 bool prevCycleForwardDownState = false, prevCycleBackwardDownState = false, prevSendDownState = false, prevToggledState = false, prevCycleBackwardSoundDirDownState = false, prevVolUpState = false, prevVolDownState = false;
-bool isToggled = true, isSendDown, isCycleForwardDown = false, isCycleBackwardDown = false, isVolUpDown = false, isVolDownDown = false, isPitchUpDown = false, isPitchDownDown = false, prevResetState = false;
+bool isToggled = false, isSendDown, isCycleForwardDown = false, isCycleBackwardDown = false, isVolUpDown = false, isVolDownDown = false, isPitchUpDown = false, isPitchDownDown = false, prevResetState = false;
 SHORT sendKeyState = 0x7F, cycleForwardKeyState = 0x7F, cycleBackwardKeyState = 0x7F, disableKeyState = 0x7F, volUpKeyState = 0x7F, volDownKeyState = 0x7F, pitchUpKeyState = 0x7F, pitchDownKeyState = 0x7F;
 uint32_t voiceChatKeyCode, cycleForwardSoundKeyCode, cycleBackwardSoundKeyCode, toggleSoundboardKeyCode;
 
@@ -63,9 +63,9 @@ DWORD WINAPI keyPressesThread(LPVOID lpParameter) {
     sendKeyState = GetKeyState(voiceChatKeyCode), cycleForwardKeyState = GetKeyState(0x60), cycleBackwardKeyState = GetKeyState(0x61), disableKeyState = GetKeyState(0x12);
     isToggled = disableKeyState & 1, isSendDown = sendKeyState & 0x8000, isCycleForwardDown = cycleForwardKeyState & 0x8000, isCycleBackwardDown = cycleBackwardKeyState & 0x8000;
     if (isToggled && isToggled != prevToggledState) {
-      printf("Effects disabled!\n");
+      printf("[net]: Effects disabled!\n");
     } else if (isToggled == false && isToggled != prevToggledState) {
-      printf("Effects enabled!\n");
+      printf("[net]: Effects enabled!\n");
     }
     Sleep(5);
     prevSendDownState = isSendDown;
@@ -189,10 +189,12 @@ float noiseReductionProcessor(ma_device* pDevice, void* pOutput, const void* pIn
   }
 }
 void* data_callback(ma_device* pDevice, void* pOutput, const void* pInput, ma_uint32 frameCount) {
-  if (transmitState_net()) {
+  if (!transmitState_net()) {
     vadProbability = noiseReductionProcessor(pDevice, pOutput, pInput, frameCount);
   } else {
     vadProbability = 0.0F;
+    dB_avg = 0.0F;
+    ampl_avg = 0.0F;
   }
 }
 void initSoundHardwareVars(int initCaptureDeviceCount, int initPlaybackDeviceCount) {
@@ -335,7 +337,6 @@ int startMicPassthrough_net(int captureDev, int playbackDev) {
   captureDevList[0] = captureDev;
   playbackDevList[0] = playbackDev;
   spawnNewMiniaudioThread(0, 0, &captureDevList[0], &playbackDevList[0]);
-  Sleep(1000);
   hThread = CreateThread(NULL, 0, keyPressesThread, NULL, 0, &dwThreadId);
   if (hThread == NULL) {
     _tprintf(_T("[net]: CreateThread failed, error %d\n"), GetLastError());
