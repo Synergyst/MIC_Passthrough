@@ -47,12 +47,13 @@ EXPORT void deinitAll_net();*/
 EXPORT float getVadProbability_net();
 EXPORT float getDecibel_net();
 EXPORT bool transmitState_net();
+EXPORT void setVolume_net(int volume);
 //EXPORT float getAmplitude_net();
 WSADATA wsaData;
 SOCKET sockU, sock_control;
 struct sockaddr_in server_addrU;
 int bytes_sentU, retU;
-float vadProbability = 0.0F, dB_avg = 0.0F, ampl_avg = 0.0F;
+float vadProbability = 0.0F, dB_avg = 0.0F, ampl_avg = 0.0F, volume = 1.0F;
 bool prevCycleForwardDownState = false, prevCycleBackwardDownState = false, prevSendDownState = false, prevToggledState = false, prevCycleBackwardSoundDirDownState = false, prevVolUpState = false, prevVolDownState = false;
 bool isToggled = false, isSendDown, isCycleForwardDown = false, isCycleBackwardDown = false, isVolUpDown = false, isVolDownDown = false, isPitchUpDown = false, isPitchDownDown = false, prevResetState = false;
 SHORT sendKeyState = 0x7F, cycleForwardKeyState = 0x7F, cycleBackwardKeyState = 0x7F, disableKeyState = 0x7F, volUpKeyState = 0x7F, volDownKeyState = 0x7F, pitchUpKeyState = 0x7F, pitchDownKeyState = 0x7F;
@@ -74,6 +75,9 @@ DWORD WINAPI keyPressesThread(LPVOID lpParameter) {
     prevCycleBackwardDownState = isCycleBackwardDown;
   }
   return 0;
+}
+void setVolume_net(int volume) {
+  volume = (float)volume / 100.0F;
 }
 bool transmitState_net() {
   return isToggled;
@@ -170,10 +174,10 @@ float noiseReductionProcessor(ma_device* pDevice, void* pOutput, const void* pIn
     float* tempOut = calloc(frameCount * sizeof(float), sizeof(float));
     short* tempIn = calloc(frameCount * sizeof(short), sizeof(short));
     unsigned char* netOut = calloc(frameCount * sizeof(unsigned char), sizeof(unsigned char));
-    for (int i = 0; i < frameCount; i++) tempOut[i] = pInputS16[i];
+    for (int i = 0; i < frameCount; i++) tempOut[i] = (pInputS16[i]);
     //float fadeMultiplier = 1.0F, vadThreshold = 0.05F;
     float vadProb = rnnoise_process_frame(st[0], tempOut, tempOut);
-    for (int i = 0; i < frameCount; i++) tempIn[i] = tempOut[i];
+    for (int i = 0; i < frameCount; i++) tempIn[i] = (tempOut[i] * volume);
     ma_convert_pcm_frames_format(pOutput, ma_format_s16, tempIn, ma_format_s16, (frameCount), 1, ma_dither_mode_none);
     ma_convert_pcm_frames_format(netOut, ma_format_u8, tempIn, ma_format_s16, (frameCount), 1, ma_dither_mode_none);
     netSendUDP(netOut, frameCount * sizeof(unsigned char));

@@ -43,6 +43,8 @@ namespace MicPassthroughAndRemoteMic {
         unsafe static extern float getDecibel();
         [System.Runtime.InteropServices.DllImport("MIC_Passthrough.dll")]
         unsafe static extern bool transmitState();
+        [System.Runtime.InteropServices.DllImport("MIC_Passthrough.dll")]
+        unsafe static extern void setVolume(int volume);
         /*[System.Runtime.InteropServices.DllImport("MIC_Passthrough.dll")]
         unsafe static extern float getAmplitude();*/
         [System.Runtime.InteropServices.DllImport("MIC_Passthrough_Net.dll")]
@@ -55,6 +57,8 @@ namespace MicPassthroughAndRemoteMic {
         unsafe static extern float getDecibel_net();
         [System.Runtime.InteropServices.DllImport("MIC_Passthrough_Net.dll")]
         unsafe static extern bool transmitState_net();
+        [System.Runtime.InteropServices.DllImport("MIC_Passthrough_Net.dll")]
+        unsafe static extern void setVolume_net(int volume);
         /*[System.Runtime.InteropServices.DllImport("MIC_Passthrough_Net.dll")]
         unsafe static extern float getAmplitude_net();*/
         private static bool firstRun1 = true;
@@ -197,6 +201,16 @@ namespace MicPassthroughAndRemoteMic {
             } else {
                 pictureBox2.Image = Resources.micpassthroughmuted;
             }
+        }
+        private void knobControl1_Load(object sender, EventArgs e) {
+            //
+        }
+        private void knobControl2_Load(object sender, EventArgs e) {
+            //
+        }
+        private void timer6_Tick(object sender, EventArgs e) {
+            setVolume(knobControl1.Value);
+            setVolume_net(knobControl2.Value);
         }
         private void timer2_Tick(object sender, EventArgs e) {
             if (transmitState()) {

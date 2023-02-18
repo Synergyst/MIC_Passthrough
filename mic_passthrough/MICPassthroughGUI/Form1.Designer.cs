@@ -67,6 +67,7 @@ namespace MicPassthroughAndRemoteMic {
             this.knobControl1 = new KnobControl.KnobControl();
             this.label10 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
+            this.timer6 = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -84,9 +85,9 @@ namespace MicPassthroughAndRemoteMic {
             // notifyIcon1
             // 
             this.notifyIcon1.BalloonTipText = "Double-click to unhide!";
-            this.notifyIcon1.BalloonTipTitle = "Microphone Passthrough";
+            this.notifyIcon1.BalloonTipTitle = "Mic Passthrough + Remote Mic";
             this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
-            this.notifyIcon1.Text = "Microphone Passthrough";
+            this.notifyIcon1.Text = "Mic Passthrough + Remote Mic";
             this.notifyIcon1.Visible = true;
             this.notifyIcon1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon1_MouseDoubleClick);
             // 
@@ -215,9 +216,9 @@ namespace MicPassthroughAndRemoteMic {
             // 
             // radioButton1
             // 
-            this.radioButton1.Location = new System.Drawing.Point(244, 361);
+            this.radioButton1.Location = new System.Drawing.Point(318, 361);
             this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(61, 16);
+            this.radioButton1.Size = new System.Drawing.Size(28, 16);
             this.radioButton1.TabIndex = 17;
             this.radioButton1.TabStop = true;
             this.radioButton1.Text = "C";
@@ -225,9 +226,9 @@ namespace MicPassthroughAndRemoteMic {
             // 
             // radioButton2
             // 
-            this.radioButton2.Location = new System.Drawing.Point(311, 361);
+            this.radioButton2.Location = new System.Drawing.Point(352, 361);
             this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(49, 16);
+            this.radioButton2.Size = new System.Drawing.Size(29, 16);
             this.radioButton2.TabIndex = 18;
             this.radioButton2.TabStop = true;
             this.radioButton2.Text = "A";
@@ -235,9 +236,9 @@ namespace MicPassthroughAndRemoteMic {
             // 
             // radioButton3
             // 
-            this.radioButton3.Location = new System.Drawing.Point(366, 361);
+            this.radioButton3.Location = new System.Drawing.Point(387, 361);
             this.radioButton3.Name = "radioButton3";
-            this.radioButton3.Size = new System.Drawing.Size(50, 16);
+            this.radioButton3.Size = new System.Drawing.Size(29, 16);
             this.radioButton3.TabIndex = 19;
             this.radioButton3.TabStop = true;
             this.radioButton3.Text = "Z";
@@ -245,12 +246,12 @@ namespace MicPassthroughAndRemoteMic {
             // 
             // radioButton4
             // 
-            this.radioButton4.Location = new System.Drawing.Point(183, 361);
+            this.radioButton4.Location = new System.Drawing.Point(254, 361);
             this.radioButton4.Name = "radioButton4";
-            this.radioButton4.Size = new System.Drawing.Size(55, 16);
+            this.radioButton4.Size = new System.Drawing.Size(58, 16);
             this.radioButton4.TabIndex = 20;
             this.radioButton4.TabStop = true;
-            this.radioButton4.Text = "no-net";
+            this.radioButton4.Text = "disable";
             this.radioButton4.UseVisualStyleBackColor = true;
             // 
             // progressBar3
@@ -372,6 +373,7 @@ namespace MicPassthroughAndRemoteMic {
             this.knobControl2.StartAngle = 135F;
             this.knobControl2.TabIndex = 27;
             this.knobControl2.Value = 0;
+            this.knobControl2.Load += new System.EventHandler(this.knobControl2_Load);
             // 
             // knobControl1
             // 
@@ -396,6 +398,7 @@ namespace MicPassthroughAndRemoteMic {
             this.knobControl1.StartAngle = 135F;
             this.knobControl1.TabIndex = 26;
             this.knobControl1.Value = 0;
+            this.knobControl1.Load += new System.EventHandler(this.knobControl1_Load);
             // 
             // label10
             // 
@@ -417,6 +420,12 @@ namespace MicPassthroughAndRemoteMic {
             this.label11.TabIndex = 33;
             this.label11.Text = "network";
             this.label11.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // timer6
+            // 
+            this.timer6.Enabled = true;
+            this.timer6.Interval = 50;
+            this.timer6.Tick += new System.EventHandler(this.timer6_Tick);
             // 
             // Form1
             // 
@@ -457,7 +466,7 @@ namespace MicPassthroughAndRemoteMic {
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "Form1";
-            this.Text = "Microphone Passthrough";
+            this.Text = "Mic Passthrough and Remote Mic";
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
@@ -501,6 +510,7 @@ namespace MicPassthroughAndRemoteMic {
         private Label label9;
         private Label label10;
         private Label label11;
+        private Timer timer6;
     }
 }
 
