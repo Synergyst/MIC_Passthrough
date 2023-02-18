@@ -11,9 +11,9 @@ using System.Diagnostics;
 using System.Threading;
 using System.Runtime.InteropServices;
 using System.Security.AccessControl;
-using MicrophonePassthrough.Properties;
+using MicPassthroughAndRemoteMic.Properties;
 
-namespace MicrophonePassthrough {
+namespace MicPassthroughAndRemoteMic {
     public partial class Form1 : Form {
         public static bool actuallyClose = false;
         Thread micThr, micThrNet;

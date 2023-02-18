@@ -56,11 +56,11 @@ float vadProbability = 0.0F, dB_avg = 0.0F, ampl_avg = 0.0F;
 bool prevCycleForwardDownState = false, prevCycleBackwardDownState = false, prevSendDownState = false, prevToggledState = false, prevCycleBackwardSoundDirDownState = false, prevVolUpState = false, prevVolDownState = false;
 bool isToggled = false, isSendDown, isCycleForwardDown = false, isCycleBackwardDown = false, isVolUpDown = false, isVolDownDown = false, isPitchUpDown = false, isPitchDownDown = false, prevResetState = false;
 SHORT sendKeyState = 0x7F, cycleForwardKeyState = 0x7F, cycleBackwardKeyState = 0x7F, disableKeyState = 0x7F, volUpKeyState = 0x7F, volDownKeyState = 0x7F, pitchUpKeyState = 0x7F, pitchDownKeyState = 0x7F;
-uint32_t voiceChatKeyCode, cycleForwardSoundKeyCode, cycleBackwardSoundKeyCode, toggleSoundboardKeyCode;
+uint32_t toggleKeyCode = 0x6B, voiceChatKeyCode, cycleForwardSoundKeyCode, cycleBackwardSoundKeyCode, toggleSoundboardKeyCode;
 // TODO: Reimplement function to safely close out of threads and other tasks
 DWORD WINAPI keyPressesThread(LPVOID lpParameter) {
   while (true) {
-    sendKeyState = GetKeyState(voiceChatKeyCode), cycleForwardKeyState = GetKeyState(0x60), cycleBackwardKeyState = GetKeyState(0x61), disableKeyState = GetKeyState(0x12);
+    sendKeyState = GetKeyState(voiceChatKeyCode), cycleForwardKeyState = GetKeyState(0x60), cycleBackwardKeyState = GetKeyState(0x61), disableKeyState = GetKeyState(toggleKeyCode);
     isToggled = disableKeyState & 1, isSendDown = sendKeyState & 0x8000, isCycleForwardDown = cycleForwardKeyState & 0x8000, isCycleBackwardDown = cycleBackwardKeyState & 0x8000;
     /*if (isToggled && isToggled != prevToggledState) {
       printf("[main]: Effects disabled!\n");

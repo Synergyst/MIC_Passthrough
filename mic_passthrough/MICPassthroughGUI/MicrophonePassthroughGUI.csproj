@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{004BAC68-D38C-4D94-8AFA-CBB533193A8D}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>MicrophonePassthrough</RootNamespace>
-    <AssemblyName>Microphone_Passthrough</AssemblyName>
+    <RootNamespace>MicPassthroughAndRemoteMic</RootNamespace>
+    <AssemblyName>MicPassthroughAndRemoteMic</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <LangVersion>8.0</LangVersion>
     <FileAlignment>512</FileAlignment>
@@ -43,7 +43,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>x64</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>full</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>..\..\bin\</OutputPath>
@@ -55,7 +55,7 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>MicrophonePassthrough.Program</StartupObject>
+    <StartupObject>MicPassthroughAndRemoteMic.Program</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>

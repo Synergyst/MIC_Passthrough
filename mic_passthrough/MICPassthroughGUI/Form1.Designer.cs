@@ -2,8 +2,7 @@
 using System;
 using System.Windows.Forms;
 
-namespace MicrophonePassthrough
-{
+namespace MicPassthroughAndRemoteMic {
     partial class Form1
     {
         /// <summary>
@@ -343,9 +342,9 @@ namespace MicrophonePassthrough
             // label9
             // 
             this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.25F);
-            this.label9.Location = new System.Drawing.Point(253, 677);
+            this.label9.Location = new System.Drawing.Point(244, 677);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(48, 12);
+            this.label9.Size = new System.Drawing.Size(66, 12);
             this.label9.TabIndex = 31;
             this.label9.Text = "volume";
             this.label9.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -425,7 +424,7 @@ namespace MicrophonePassthrough
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(212)))), ((int)(((byte)(212)))), ((int)(((byte)(255)))));
-            this.ClientSize = new System.Drawing.Size(419, 688);
+            this.ClientSize = new System.Drawing.Size(419, 697);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.label9);

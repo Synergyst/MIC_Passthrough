@@ -9,7 +9,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.Management;
 
-namespace MicrophonePassthrough {
+namespace MicPassthroughAndRemoteMic {
     static class Program {
         public class MultiFormContext : ApplicationContext {
             private int openForms;
