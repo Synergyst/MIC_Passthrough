@@ -31,8 +31,5 @@
     <Library Include="..\..\rnnoise-windows.lib">
       <Filter>Resource Files</Filter>
     </Library>
-    <Library Include="..\..\RNNoiselib.lib">
-      <Filter>Resource Files</Filter>
-    </Library>
   </ItemGroup>
 </Project>

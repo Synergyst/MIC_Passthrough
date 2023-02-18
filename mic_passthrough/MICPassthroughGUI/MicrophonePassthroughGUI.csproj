@@ -46,7 +46,7 @@
     <PlatformTarget>x64</PlatformTarget>
     <DebugType>full</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>.\</OutputPath>
+    <OutputPath>..\..\bin\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -151,7 +151,7 @@
     <None Include="micpassthroughmuted.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="KnobControl\KnobControl.csproj">
+    <ProjectReference Include="..\KnobControl\KnobControl.csproj">
       <Project>{04123f59-331d-4582-be0d-721feab6050f}</Project>
       <Name>KnobControl</Name>
     </ProjectReference>
@@ -162,6 +162,6 @@
     </PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>.\sign.bat</PostBuildEvent>
+    <PostBuildEvent>C:\Users\colet\source\repos\MicrophonePassthrough\sign.bat</PostBuildEvent>
   </PropertyGroup>
 </Project>

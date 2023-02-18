@@ -25,7 +25,7 @@
 #include "miniaudio.h"
 #include "rnnoise.h"
 #pragma comment(lib, "User32.lib")
-#pragma comment(lib, "RNNoiselib.lib")
+//#pragma comment(lib, "RNNoiselib.lib")
 #pragma comment(lib, "ws2_32.lib")
 extern struct RNNModel rnnoise_model_orig;
 extern struct RNNModel rnnoise_model_5h_b_500k;
