@@ -136,6 +136,21 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Microphone.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="micpassthrough.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="micpassthroughmuted.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="micpassthrough.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="micpassthroughmuted.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>

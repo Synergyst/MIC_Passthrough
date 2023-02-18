@@ -54,18 +54,14 @@ struct sockaddr_in server_addrU;
 int bytes_sentU, retU;
 float vadProbability = 0.0F, dB_avg = 0.0F, ampl_avg = 0.0F;
 bool prevCycleForwardDownState = false, prevCycleBackwardDownState = false, prevSendDownState = false, prevToggledState = false, prevCycleBackwardSoundDirDownState = false, prevVolUpState = false, prevVolDownState = false;
-bool isToggled = false, isSendDown, isCycleForwardDown = false, isCycleBackwardDown = false, isVolUpDown = false, isVolDownDown = false, isPitchUpDown = false, isPitchDownDown = false, prevResetState = false;
+bool isToggled = true, isSendDown, isCycleForwardDown = false, isCycleBackwardDown = false, isVolUpDown = false, isVolDownDown = false, isPitchUpDown = false, isPitchDownDown = false, prevResetState = false;
 SHORT sendKeyState = 0x7F, cycleForwardKeyState = 0x7F, cycleBackwardKeyState = 0x7F, disableKeyState = 0x7F, volUpKeyState = 0x7F, volDownKeyState = 0x7F, pitchUpKeyState = 0x7F, pitchDownKeyState = 0x7F;
 uint32_t voiceChatKeyCode, cycleForwardSoundKeyCode, cycleBackwardSoundKeyCode, toggleSoundboardKeyCode;
-bool globalSendState = true;
 
 DWORD WINAPI keyPressesThread(LPVOID lpParameter) {
   while (true) {
-    sendKeyState = GetKeyState(0x12), cycleForwardKeyState = GetKeyState(0x60), cycleBackwardKeyState = GetKeyState(0x61), disableKeyState = GetKeyState(0x62);
+    sendKeyState = GetKeyState(voiceChatKeyCode), cycleForwardKeyState = GetKeyState(0x60), cycleBackwardKeyState = GetKeyState(0x61), disableKeyState = GetKeyState(0x12);
     isToggled = disableKeyState & 1, isSendDown = sendKeyState & 0x8000, isCycleForwardDown = cycleForwardKeyState & 0x8000, isCycleBackwardDown = cycleBackwardKeyState & 0x8000;
-    if (sendKeyState) {
-      globalSendState ^= globalSendState;
-    }
     if (isToggled && isToggled != prevToggledState) {
       printf("Effects disabled!\n");
     }
@@ -81,7 +77,7 @@ DWORD WINAPI keyPressesThread(LPVOID lpParameter) {
   return 0;
 }
 bool transmitState() {
-  return globalSendState;
+  return isToggled;
 }
 float get_average_decibel(short frames[], int length) {
   float dB_sum = 0.0;
@@ -194,7 +190,11 @@ float noiseReductionProcessor(ma_device* pDevice, void* pOutput, const void* pIn
   }
 }
 void *data_callback(ma_device* pDevice, void* pOutput, const void* pInput, ma_uint32 frameCount) {
-  vadProbability = noiseReductionProcessor(pDevice, pOutput, pInput, frameCount);
+  if (transmitState()) {
+    vadProbability = noiseReductionProcessor(pDevice, pOutput, pInput, frameCount);
+  } else {
+    vadProbability = 0.0F;
+  }
 }
 void initSoundHardwareVars(int initCaptureDeviceCount, int initPlaybackDeviceCount) {
   // TODO: allow for definition of independent capture/playback device counts

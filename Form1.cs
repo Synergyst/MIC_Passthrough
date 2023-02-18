@@ -10,6 +10,8 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using System.Threading;
 using System.Runtime.InteropServices;
+using System.Security.AccessControl;
+using MicrophonePassthrough.Properties;
 
 namespace MicrophonePassthrough {
     public partial class Form1 : Form {
@@ -164,7 +166,10 @@ namespace MicrophonePassthrough {
             this.WindowState = FormWindowState.Normal;
         }
         private void Form1_Load(object sender, EventArgs e) {
-            //
+            pictureBox1.Image = Resources.micpassthroughmuted;
+            pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
+            pictureBox2.Image = Resources.micpassthroughmuted;
+            pictureBox2.SizeMode = PictureBoxSizeMode.StretchImage;
         }
         private void timer1_Tick(object sender, EventArgs e) {
             int vadProb = (int)(getVadProbability() * 1000.0F);
@@ -189,6 +194,19 @@ namespace MicrophonePassthrough {
                     progressBar4.Value = progressBar4.Value - 1;
                     progressBar4.Refresh();
                 }
+            }
+        }
+
+        private void timer5_Tick(object sender, EventArgs e) {
+            if (transmitState()) {
+                pictureBox1.Image = Resources.micpassthrough;
+            } else {
+                pictureBox1.Image = Resources.micpassthroughmuted;
+            }
+            if (transmitState_net()) {
+                pictureBox2.Image = Resources.micpassthrough;
+            } else {
+                pictureBox2.Image = Resources.micpassthroughmuted;
             }
         }
 
