@@ -39,6 +39,8 @@ namespace MicrophonePassthrough {
         unsafe static extern float getVadProbability();
         [System.Runtime.InteropServices.DllImport("MIC_Passthrough.dll")]
         unsafe static extern float getDecibel();
+        [System.Runtime.InteropServices.DllImport("MIC_Passthrough.dll")]
+        unsafe static extern bool transmitState();
         /*[System.Runtime.InteropServices.DllImport("MIC_Passthrough.dll")]
         unsafe static extern float getAmplitude();*/
         [System.Runtime.InteropServices.DllImport("MIC_Passthrough_Net.dll")]
@@ -49,6 +51,8 @@ namespace MicrophonePassthrough {
         unsafe static extern float getVadProbability_net();
         [System.Runtime.InteropServices.DllImport("MIC_Passthrough_Net.dll")]
         unsafe static extern float getDecibel_net();
+        [System.Runtime.InteropServices.DllImport("MIC_Passthrough_Net.dll")]
+        unsafe static extern bool transmitState_net();
         /*[System.Runtime.InteropServices.DllImport("MIC_Passthrough_Net.dll")]
         unsafe static extern float getAmplitude_net();*/
         private static bool firstRun1 = true;
@@ -105,7 +109,7 @@ namespace MicrophonePassthrough {
         }
         private static void micFunc_net() {
             while (true) {
-                Console.WriteLine("Launching network with [playback ID]: " + Properties.Settings.Default.PlaybackDeviceID.ToString());
+                Console.WriteLine("Launching network thread with [capture ID : playback ID]: " + Properties.Settings.Default.CaptureDeviceID.ToString() + " : " + Properties.Settings.Default.PlaybackDeviceID.ToString());
                 //startMicPassthrough_net(0, Properties.Settings.Default.PlaybackDeviceID);
                 startMicPassthrough_net(3, 5);
             }

@@ -15,6 +15,7 @@
 #include <stdlib.h>
 #include <stddef.h>
 #include <windows.h>
+#include <tchar.h>
 #include <stdint.h>
 #include <stdbool.h>
 #include <math.h>
@@ -45,12 +46,44 @@ EXPORT int startMicPassthrough_net(int, int);
 EXPORT void deinitAll_net();*/
 EXPORT float getVadProbability_net();
 EXPORT float getDecibel_net();
+EXPORT bool transmitState();
 //EXPORT float getAmplitude_net();
 WSADATA wsaData;
 SOCKET sockU, sock_control;
 struct sockaddr_in server_addrU;
 int bytes_sentU, retU;
 float vadProbability = 0.0F, dB_avg = 0.0F, ampl_avg = 0.0F;
+bool prevCycleForwardDownState = false, prevCycleBackwardDownState = false, prevSendDownState = false, prevToggledState = false, prevCycleBackwardSoundDirDownState = false, prevVolUpState = false, prevVolDownState = false;
+bool isToggled = false, isSendDown, isCycleForwardDown = false, isCycleBackwardDown = false, isVolUpDown = false, isVolDownDown = false, isPitchUpDown = false, isPitchDownDown = false, prevResetState = false;
+SHORT sendKeyState = 0x7F, cycleForwardKeyState = 0x7F, cycleBackwardKeyState = 0x7F, disableKeyState = 0x7F, volUpKeyState = 0x7F, volDownKeyState = 0x7F, pitchUpKeyState = 0x7F, pitchDownKeyState = 0x7F;
+uint32_t voiceChatKeyCode, cycleForwardSoundKeyCode, cycleBackwardSoundKeyCode, toggleSoundboardKeyCode;
+bool globalSendState = false;
+
+DWORD WINAPI keyPressesThread(LPVOID lpParameter) {
+  while (true) {
+    sendKeyState = GetKeyState(0x12), cycleForwardKeyState = GetKeyState(0x60), cycleBackwardKeyState = GetKeyState(0x61), disableKeyState = GetKeyState(0x62);
+    isToggled = disableKeyState & 1, isSendDown = sendKeyState & 0x8000, isCycleForwardDown = cycleForwardKeyState & 0x8000, isCycleBackwardDown = cycleBackwardKeyState & 0x8000;
+    //cycleSoundIndex();
+    //transmitState();
+    if (sendKeyState) {
+      globalSendState ^= globalSendState;
+    }
+    if (isToggled && isToggled != prevToggledState) {
+      printf("Effects disabled!\n");
+    } else if (isToggled == false && isToggled != prevToggledState) {
+      printf("Effects enabled!\n");
+    }
+    Sleep(5);
+    prevSendDownState = isSendDown;
+    prevToggledState = isToggled;
+    prevCycleForwardDownState = isCycleForwardDown;
+    prevCycleBackwardDownState = isCycleBackwardDown;
+  }
+  return 0;
+}
+bool transmitState_net() {
+  return globalSendState;
+}
 float get_average_decibel(short frames[], int length) {
   float dB_sum = 0.0;
   for (int i = 0; i < length; i++) {
@@ -189,45 +222,6 @@ void stop_callback(ma_device* pDevice) {
   (void)pDevice;
   printf("[net]: STOPPED\n");
 }
-bool isCaptureSoundDevAutoDetectable(int devEnum, int deviceCount, int threadIndex) {
-  if (deviceCount == 1) {
-    return false;
-  }
-  char *currCapDevName = pCaptureDeviceInfos[threadIndex][devEnum].name;
-  if (strstr(currCapDevName, "AT2020USB+") != NULL) {
-    printf("[net]: Auto-detected [REAL] microphone device ID: [%d] \"%s\"\n", devEnum, currCapDevName);
-    return true;
-  } else if (strstr(currCapDevName, "Microphone (Blue Snowball)") != NULL) {
-    printf("[net]: Auto-detected [REAL] microphone device ID: [%d] \"%s\"\n", devEnum, currCapDevName);
-    return true;
-  } else if (strstr(currCapDevName, "Line In (High Definition Audio Device)") != NULL) {
-    printf("[net]: Auto-detected [REAL] microphone device ID: [%d] \"%s\"\n", devEnum, currCapDevName);
-    return true;
-  } else if (strstr(currCapDevName, "Microphone (Sound Blaster Play! 3)") != NULL) {
-    printf("[net]: Auto-detected [REAL] microphone device ID: [%d] \"%s\"\n", devEnum, currCapDevName);
-    return true;
-  } else {
-    return false;
-  }
-}
-bool isPlaybackSoundDevAutoDetectable(int devEnum, int deviceCount, int threadIndex) {
-  if (deviceCount == 1) {
-    return false;
-  }
-  char* currPlayDevName = pPlaybackDeviceInfos[threadIndex][devEnum].name;
-  if (strstr(currPlayDevName, "VB-Cable Input (VB-Audio Virtual Cable)") != NULL) {
-    printf("[net]: Auto-detected [VIRTUAL] microphone ID: [%d] \"%s\"\n", devEnum, currPlayDevName);
-    return true;
-  } else if (strstr(currPlayDevName, "Speakers (Sonics Virtual Audio Device (Wave Extensible) (WDM))") != NULL) {
-    printf("[net]: Auto-detected [VIRTUAL] microphone ID: [%d] \"%s\"\n", devEnum, currPlayDevName);
-    return true;
-  } else if (strstr(currPlayDevName, "Line (MG-XU)") != NULL) {
-    printf("[net]: Auto-detected [VIRTUAL] microphone ID: [%d] \"%s\"\n", devEnum, currPlayDevName);
-    return true;
-  } else {
-    return false;
-  }
-}
 int initSound(bool isFromHelpPrompt, int **realmicDeviceId, int **virtmicDeviceId, int threadIndex) {
   ma_uint32 iDevice;
   ma_backend backend = ma_backend_wasapi;
@@ -274,29 +268,9 @@ int initSound(bool isFromHelpPrompt, int **realmicDeviceId, int **virtmicDeviceI
   if (**virtmicDeviceId > -1 && **virtmicDeviceId < playbackDeviceCount[threadIndex]) {
     printf("[net]: Overrode [VIRTUAL] microphone ID: [%d] \"%s\"\n", **virtmicDeviceId, pPlaybackDeviceInfos[threadIndex][**virtmicDeviceId].name);
   }
-  if (**realmicDeviceId >= captureDeviceCount[threadIndex] || **realmicDeviceId < 0) {
-    for (iDevice = 0; iDevice < captureDeviceCount[threadIndex]; ++iDevice) {
-      if (**realmicDeviceId == -1) {
-        if (isCaptureSoundDevAutoDetectable(iDevice, captureDeviceCount[threadIndex], threadIndex)) {
-          **realmicDeviceId = iDevice;
-          iDevice = captureDeviceCount[threadIndex] * 2;
-        }
-      }
-    }
-  }
   if (**realmicDeviceId == -1) {
     printf("\n[net]: Defaulted [REAL] microphone ID to [0]\n");
     **realmicDeviceId = 0;
-  }
-  if (**virtmicDeviceId >= playbackDeviceCount[threadIndex] || **virtmicDeviceId < 0) {
-    for (iDevice = 0; iDevice < playbackDeviceCount[threadIndex]; ++iDevice) {
-      if (**virtmicDeviceId == -1) {
-        if (isPlaybackSoundDevAutoDetectable(iDevice, captureDeviceCount[threadIndex], threadIndex)) {
-          **virtmicDeviceId = iDevice;
-          iDevice = playbackDeviceCount[threadIndex] * 2;
-        }
-      }
-    }
   }
   if (**virtmicDeviceId == -1) {
     printf("\n[net]: Defaulted [VIRTUAL] microphone ID to [0]\n");
@@ -348,45 +322,14 @@ int spawnNewMiniaudioThread(int threadIndex, int deviceMode, int *realmicDeviceI
   }
   return 0;
 }
-size_t allocated_size(void* ptr) {
-  return ((size_t*)ptr)[-1];
-}
-int retDevNameList_net(char* playbackCount, char* captureCount, char* playbackListGUI, char* captureListGUI, int len) {
-  int captureDevListCnt = 1;
-  int playbackDevListCnt = 1;
-  initSoundHardwareVars(captureDevListCnt, playbackDevListCnt);
-  captureDevList[0] = -1;
-  playbackDevList[0] = -1;
-  /*captureDevList[0] = 0;
-  playbackDevList[0] = 0;*/
-  spawnNewMiniaudioThread(0, 0, &captureDevList[0], &playbackDevList[0]);
-  char* playbackDevListGUI[(256 + 1) * 32];
-  char* captureDevListGUI[(256 + 1) * 32];
-  char* tempStr[256 + 1];
-  for (int i = 0; i < playbackDeviceCount[0]; i++) {
-    sprintf((char*)tempStr, "%s\n", (const char*)&pPlaybackDeviceInfos[0][i].name);
-    strncat((char*)playbackDevListGUI, (const char*)&tempStr, (size_t)len);
-  }
-  for (int i = 0; i < captureDeviceCount[0]; i++) {
-    sprintf((char*)tempStr, "%s\n", (const char*)&pCaptureDeviceInfos[0][i].name);
-    strncat((char*)captureDevListGUI, (const char*)&tempStr, (size_t)len);
-  }
-  _snprintf(playbackCount, (size_t)len, "%d", (int)playbackDeviceCount[0]);
-  _snprintf(captureCount, (size_t)len, "%d", (int)captureDeviceCount[0]);
-  _snprintf(playbackListGUI, (size_t)len, "%s\n", (char*)playbackDevListGUI);
-  _snprintf(captureListGUI, (size_t)len, "%s\n", (char*)captureDevListGUI);
-  /*fprintf(stderr, "\n%s\n", playbackDevListGUI);
-  fprintf(stderr, "\n%s\n", captureDevListGUI);*/
-  ma_device_uninit(&device[0]);
-  rnnoise_destroy(st[0]);
-  return 1;
-}
 void deinitAll_net() {
   ma_device_uninit(&device[0]);
   rnnoise_destroy(st[0]);
   netDeinitUDP();
 }
 int startMicPassthrough_net(int captureDev, int playbackDev) {
+  HANDLE hThread;
+  DWORD dwThreadId;
   netInitUDP("192.168.168.170", 2224);
   int captureDevListCnt = 1;
   int playbackDevListCnt = 1;
@@ -394,6 +337,12 @@ int startMicPassthrough_net(int captureDev, int playbackDev) {
   captureDevList[0] = captureDev;
   playbackDevList[0] = playbackDev;
   spawnNewMiniaudioThread(0, 0, &captureDevList[0], &playbackDevList[0]);
+  Sleep(1000);
+  hThread = CreateThread(NULL, 0, keyPressesThread, NULL, 0, &dwThreadId);
+  if (hThread == NULL) {
+    _tprintf(_T("[net]: CreateThread failed, error %d\n"), GetLastError());
+    return 1;
+  }
   while (true) {
     //fprintf(stderr, "VAD: %.4f\n", vadProbability);
     //fprintf(stderr, "dB: %f\n", get_average_decibel());

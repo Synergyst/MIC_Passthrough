@@ -15,6 +15,7 @@
 #include <stdlib.h>
 #include <stddef.h>
 #include <windows.h>
+#include <tchar.h>
 #include <stdint.h>
 #include <stdbool.h>
 #include <math.h>
@@ -46,11 +47,42 @@ EXPORT void deinitAll();
 EXPORT float getVadProbability();
 EXPORT float getDecibel();
 EXPORT float getAmplitude();
+EXPORT bool transmitState();
 WSADATA wsaData;
 SOCKET sockU, sock_control;
 struct sockaddr_in server_addrU;
 int bytes_sentU, retU;
 float vadProbability = 0.0F, dB_avg = 0.0F, ampl_avg = 0.0F;
+bool prevCycleForwardDownState = false, prevCycleBackwardDownState = false, prevSendDownState = false, prevToggledState = false, prevCycleBackwardSoundDirDownState = false, prevVolUpState = false, prevVolDownState = false;
+bool isToggled = false, isSendDown, isCycleForwardDown = false, isCycleBackwardDown = false, isVolUpDown = false, isVolDownDown = false, isPitchUpDown = false, isPitchDownDown = false, prevResetState = false;
+SHORT sendKeyState = 0x7F, cycleForwardKeyState = 0x7F, cycleBackwardKeyState = 0x7F, disableKeyState = 0x7F, volUpKeyState = 0x7F, volDownKeyState = 0x7F, pitchUpKeyState = 0x7F, pitchDownKeyState = 0x7F;
+uint32_t voiceChatKeyCode, cycleForwardSoundKeyCode, cycleBackwardSoundKeyCode, toggleSoundboardKeyCode;
+bool globalSendState = true;
+
+DWORD WINAPI keyPressesThread(LPVOID lpParameter) {
+  while (true) {
+    sendKeyState = GetKeyState(0x12), cycleForwardKeyState = GetKeyState(0x60), cycleBackwardKeyState = GetKeyState(0x61), disableKeyState = GetKeyState(0x62);
+    isToggled = disableKeyState & 1, isSendDown = sendKeyState & 0x8000, isCycleForwardDown = cycleForwardKeyState & 0x8000, isCycleBackwardDown = cycleBackwardKeyState & 0x8000;
+    if (sendKeyState) {
+      globalSendState ^= globalSendState;
+    }
+    if (isToggled && isToggled != prevToggledState) {
+      printf("Effects disabled!\n");
+    }
+    else if (isToggled == false && isToggled != prevToggledState) {
+      printf("Effects enabled!\n");
+    }
+    Sleep(5);
+    prevSendDownState = isSendDown;
+    prevToggledState = isToggled;
+    prevCycleForwardDownState = isCycleForwardDown;
+    prevCycleBackwardDownState = isCycleBackwardDown;
+  }
+  return 0;
+}
+bool transmitState() {
+  return globalSendState;
+}
 float get_average_decibel(short frames[], int length) {
   float dB_sum = 0.0;
   for (int i = 0; i < length; i++) {
