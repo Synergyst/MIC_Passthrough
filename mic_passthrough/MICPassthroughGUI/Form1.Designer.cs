@@ -372,7 +372,7 @@ namespace MicPassthroughAndRemoteMic {
             this.knobControl2.SmallChange = 1;
             this.knobControl2.StartAngle = 135F;
             this.knobControl2.TabIndex = 27;
-            this.knobControl2.Value = 0;
+            this.knobControl2.Value = 100;
             this.knobControl2.Load += new System.EventHandler(this.knobControl2_Load);
             // 
             // knobControl1
@@ -397,7 +397,7 @@ namespace MicPassthroughAndRemoteMic {
             this.knobControl1.SmallChange = 1;
             this.knobControl1.StartAngle = 135F;
             this.knobControl1.TabIndex = 26;
-            this.knobControl1.Value = 0;
+            this.knobControl1.Value = 100;
             this.knobControl1.Load += new System.EventHandler(this.knobControl1_Load);
             // 
             // label10

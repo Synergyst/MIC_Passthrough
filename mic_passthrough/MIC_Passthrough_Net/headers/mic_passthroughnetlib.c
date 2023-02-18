@@ -76,8 +76,8 @@ DWORD WINAPI keyPressesThread(LPVOID lpParameter) {
   }
   return 0;
 }
-void setVolume_net(int volume) {
-  volume = (float)volume / 100.0F;
+void setVolume_net(int vol) {
+  volume = (float)vol / 100.0F;
 }
 bool transmitState_net() {
   return isToggled;
