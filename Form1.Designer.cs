@@ -62,15 +62,19 @@ namespace MicrophonePassthrough
             this.timer5 = new System.Windows.Forms.Timer(this.components);
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.knobControl1 = new KnobControl.KnobControl();
+            this.knobControl2 = new KnobControl.KnobControl();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(198, 4);
+            this.button1.Location = new System.Drawing.Point(70, 533);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(38, 27);
+            this.button1.Size = new System.Drawing.Size(38, 23);
             this.button1.TabIndex = 1;
             this.button1.Text = "Start";
             this.button1.UseVisualStyleBackColor = true;
@@ -153,7 +157,7 @@ namespace MicrophonePassthrough
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(138, 548);
+            this.progressBar1.Location = new System.Drawing.Point(145, 535);
             this.progressBar1.MarqueeAnimationSpeed = 1;
             this.progressBar1.Maximum = 1000;
             this.progressBar1.Name = "progressBar1";
@@ -166,7 +170,7 @@ namespace MicrophonePassthrough
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.25F);
-            this.label3.Location = new System.Drawing.Point(136, 535);
+            this.label3.Location = new System.Drawing.Point(143, 550);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(62, 12);
             this.label3.TabIndex = 12;
@@ -194,7 +198,7 @@ namespace MicrophonePassthrough
             // 
             // progressBar2
             // 
-            this.progressBar2.Location = new System.Drawing.Point(244, 548);
+            this.progressBar2.Location = new System.Drawing.Point(316, 536);
             this.progressBar2.MarqueeAnimationSpeed = 1;
             this.progressBar2.Name = "progressBar2";
             this.progressBar2.Size = new System.Drawing.Size(100, 11);
@@ -206,7 +210,7 @@ namespace MicrophonePassthrough
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.25F);
-            this.label5.Location = new System.Drawing.Point(244, 535);
+            this.label5.Location = new System.Drawing.Point(362, 550);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(45, 12);
             this.label5.TabIndex = 16;
@@ -260,7 +264,7 @@ namespace MicrophonePassthrough
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(350, 553);
+            this.button4.Location = new System.Drawing.Point(53, 636);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(57, 23);
             this.button4.TabIndex = 21;
@@ -270,7 +274,7 @@ namespace MicrophonePassthrough
             // 
             // progressBar3
             // 
-            this.progressBar3.Location = new System.Drawing.Point(138, 565);
+            this.progressBar3.Location = new System.Drawing.Point(145, 648);
             this.progressBar3.MarqueeAnimationSpeed = 1;
             this.progressBar3.Maximum = 1000;
             this.progressBar3.Name = "progressBar3";
@@ -281,7 +285,7 @@ namespace MicrophonePassthrough
             // 
             // progressBar4
             // 
-            this.progressBar4.Location = new System.Drawing.Point(244, 565);
+            this.progressBar4.Location = new System.Drawing.Point(316, 648);
             this.progressBar4.MarqueeAnimationSpeed = 1;
             this.progressBar4.Name = "progressBar4";
             this.progressBar4.Size = new System.Drawing.Size(100, 11);
@@ -309,7 +313,7 @@ namespace MicrophonePassthrough
             // 
             // pictureBox2
             // 
-            this.pictureBox2.Location = new System.Drawing.Point(109, 565);
+            this.pictureBox2.Location = new System.Drawing.Point(116, 636);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(23, 23);
             this.pictureBox2.TabIndex = 25;
@@ -318,11 +322,79 @@ namespace MicrophonePassthrough
             // pictureBox1
             // 
             this.pictureBox1.InitialImage = null;
-            this.pictureBox1.Location = new System.Drawing.Point(109, 536);
+            this.pictureBox1.Location = new System.Drawing.Point(114, 533);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(23, 23);
             this.pictureBox1.TabIndex = 24;
             this.pictureBox1.TabStop = false;
+            // 
+            // knobControl1
+            // 
+            this.knobControl1.EndAngle = 405F;
+            this.knobControl1.ImeMode = System.Windows.Forms.ImeMode.On;
+            this.knobControl1.KnobBackColor = System.Drawing.Color.WhiteSmoke;
+            this.knobControl1.KnobPointerStyle = KnobControl.KnobControl.KnobPointerStyles.line;
+            this.knobControl1.LargeChange = 5;
+            this.knobControl1.Location = new System.Drawing.Point(251, 535);
+            this.knobControl1.Maximum = 100;
+            this.knobControl1.Minimum = 0;
+            this.knobControl1.Name = "knobControl1";
+            this.knobControl1.PointerColor = System.Drawing.Color.SlateBlue;
+            this.knobControl1.ScaleColor = System.Drawing.Color.Black;
+            this.knobControl1.ScaleDivisions = 11;
+            this.knobControl1.ScaleFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.knobControl1.ScaleSubDivisions = 4;
+            this.knobControl1.ShowLargeScale = true;
+            this.knobControl1.ShowSmallScale = false;
+            this.knobControl1.Size = new System.Drawing.Size(59, 59);
+            this.knobControl1.SmallChange = 1;
+            this.knobControl1.StartAngle = 135F;
+            this.knobControl1.TabIndex = 26;
+            this.knobControl1.Value = 0;
+            // 
+            // knobControl2
+            // 
+            this.knobControl2.EndAngle = 405F;
+            this.knobControl2.ImeMode = System.Windows.Forms.ImeMode.On;
+            this.knobControl2.KnobBackColor = System.Drawing.Color.WhiteSmoke;
+            this.knobControl2.KnobPointerStyle = KnobControl.KnobControl.KnobPointerStyles.line;
+            this.knobControl2.LargeChange = 5;
+            this.knobControl2.Location = new System.Drawing.Point(251, 615);
+            this.knobControl2.Maximum = 100;
+            this.knobControl2.Minimum = 0;
+            this.knobControl2.Name = "knobControl2";
+            this.knobControl2.PointerColor = System.Drawing.Color.SlateBlue;
+            this.knobControl2.ScaleColor = System.Drawing.Color.Black;
+            this.knobControl2.ScaleDivisions = 11;
+            this.knobControl2.ScaleFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.knobControl2.ScaleSubDivisions = 4;
+            this.knobControl2.ShowLargeScale = true;
+            this.knobControl2.ShowSmallScale = false;
+            this.knobControl2.Size = new System.Drawing.Size(59, 59);
+            this.knobControl2.SmallChange = 1;
+            this.knobControl2.StartAngle = 135F;
+            this.knobControl2.TabIndex = 27;
+            this.knobControl2.Value = 0;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.25F);
+            this.label6.Location = new System.Drawing.Point(143, 662);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(62, 12);
+            this.label6.TabIndex = 28;
+            this.label6.Text = "Voice activity";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.25F);
+            this.label7.Location = new System.Drawing.Point(362, 662);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(45, 12);
+            this.label7.TabIndex = 29;
+            this.label7.Text = "Loudness";
             // 
             // Form1
             // 
@@ -330,7 +402,11 @@ namespace MicrophonePassthrough
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(212)))), ((int)(((byte)(212)))), ((int)(((byte)(255)))));
-            this.ClientSize = new System.Drawing.Size(419, 591);
+            this.ClientSize = new System.Drawing.Size(419, 688);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.knobControl2);
+            this.Controls.Add(this.knobControl1);
             this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.progressBar4);
@@ -395,6 +471,10 @@ namespace MicrophonePassthrough
         private Timer timer5;
         private PictureBox pictureBox2;
         private PictureBox pictureBox1;
+        private KnobControl.KnobControl knobControl1;
+        private KnobControl.KnobControl knobControl2;
+        private Label label6;
+        private Label label7;
     }
 }
 

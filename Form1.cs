@@ -170,13 +170,13 @@ namespace MicrophonePassthrough {
             pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
             pictureBox2.Image = Resources.micpassthroughmuted;
             pictureBox2.SizeMode = PictureBoxSizeMode.StretchImage;
+            trackBar1.
         }
         private void timer1_Tick(object sender, EventArgs e) {
             int vadProb = (int)(getVadProbability() * 1000.0F);
             progressBar1.Value = vadProb;
             progressBar1.Refresh();
         }
-
         private void timer3_Tick(object sender, EventArgs e) {
             int vadProb = (int)(getVadProbability_net() * 1000.0F);
             progressBar3.Value = vadProb;
