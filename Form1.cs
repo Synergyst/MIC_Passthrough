@@ -59,7 +59,12 @@ namespace MicrophonePassthrough {
         unsafe static extern float getAmplitude_net();*/
         private static bool firstRun1 = true;
         private static bool firstRun2 = true;
-        private void button1_Click_1(object sender, EventArgs e) {
+        private void Form1_Load(object sender, EventArgs e) {
+            pictureBox1.Image = Resources.micpassthroughmuted;
+            pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
+            pictureBox2.Image = Resources.micpassthroughmuted;
+            pictureBox2.SizeMode = PictureBoxSizeMode.StretchImage;
+            //
             var playMsg = new StringBuilder(65535);
             var capMsg = new StringBuilder(65535);
             var playMsgList = new StringBuilder(65535);
@@ -78,7 +83,7 @@ namespace MicrophonePassthrough {
                 }
                 checkedListBoxVirtMic.SetItemChecked(Properties.Settings.Default.PlaybackDeviceID, true);
                 this.checkedListBoxVirtMic.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.checkedListBoxVirtMic_ItemCheck);
-                checkedListBoxAuxMic.SetItemChecked(Properties.Settings.Default.PlaybackDeviceID, true);
+                checkedListBoxAuxMic.SetItemChecked(Properties.Settings.Default.AuxDeviceID, true);
                 this.checkedListBoxAuxMic.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.checkedListBoxAuxMic_ItemCheck);
             } else {
                 firstRun1 = false;
@@ -96,35 +101,25 @@ namespace MicrophonePassthrough {
             micThr = new Thread(micFunc);
             micThr.IsBackground = true;
             micThr.Start();
-        }
-        private static void micFunc() {
-            while (true) {
-                Console.WriteLine("Launching with [capture ID : playback ID]: " + Properties.Settings.Default.CaptureDeviceID.ToString() + " : " + Properties.Settings.Default.PlaybackDeviceID.ToString());
-                startMicPassthrough(Properties.Settings.Default.CaptureDeviceID, Properties.Settings.Default.PlaybackDeviceID);
-                //startMicPassthrough(1, 0);
-            }
-        }
-        private void button4_Click(object sender, EventArgs e) {
+            //
             micThrNet = new Thread(micFunc_net);
             micThrNet.IsBackground = true;
             micThrNet.Start();
         }
-        private static void micFunc_net() {
+        private static void micFunc() {
             while (true) {
-                Console.WriteLine("Launching network thread with [capture ID : playback ID]: " + Properties.Settings.Default.CaptureDeviceID.ToString() + " : " + Properties.Settings.Default.PlaybackDeviceID.ToString());
-                //startMicPassthrough_net(0, Properties.Settings.Default.PlaybackDeviceID);
-                startMicPassthrough_net(3, 5);
+                Console.WriteLine("Launching network thread with [capture ID : playback ID : Aux ID]: " + Properties.Settings.Default.CaptureDeviceID.ToString() + " : " + Properties.Settings.Default.PlaybackDeviceID.ToString() + " : " + Properties.Settings.Default.AuxDeviceID.ToString());
+                startMicPassthrough(Properties.Settings.Default.CaptureDeviceID, Properties.Settings.Default.PlaybackDeviceID);
+                //startMicPassthrough(1, 0);
             }
         }
-        private void button2_Click(object sender, EventArgs e) {
-            System.Threading.Thread.Sleep(1250);
-            Environment.Exit(0);
-            for (int x = 0; x < Application.OpenForms.Count; x++) {
-                if (Application.OpenForms[x] != this)
-                    Application.OpenForms[x].Close();
+        private static void micFunc_net() {
+            System.Threading.Thread.Sleep(3500);
+            while (true) {
+                Console.WriteLine("Launching network thread with [capture ID : playback ID : Aux ID]: " + Properties.Settings.Default.CaptureDeviceID.ToString() + " : " + Properties.Settings.Default.PlaybackDeviceID.ToString() + " : " + Properties.Settings.Default.AuxDeviceID.ToString());
+                startMicPassthrough_net(Properties.Settings.Default.CaptureDeviceID, Properties.Settings.Default.AuxDeviceID);
+                //startMicPassthrough_net(3, 5);
             }
-            System.Threading.Thread.Sleep(500);
-            this.Close();
         }
         private void button3_Click(object sender, EventArgs e) {
             System.Threading.Thread.Sleep(1250);
@@ -133,8 +128,8 @@ namespace MicrophonePassthrough {
         private void checkedListBoxAuxMic_ItemCheck(object sender, ItemCheckEventArgs e) {
             for (int ix = 0; ix < checkedListBoxAuxMic.Items.Count; ++ix)
                 if (ix != e.Index) checkedListBoxAuxMic.SetItemChecked(ix, false);
-            Properties.Settings.Default.PlaybackDeviceID = checkedListBoxAuxMic.Items.IndexOf(checkedListBoxAuxMic.SelectedItem.ToString());
-            Console.WriteLine(Properties.Settings.Default.PlaybackDeviceID);
+            Properties.Settings.Default.AuxDeviceID = checkedListBoxAuxMic.Items.IndexOf(checkedListBoxAuxMic.SelectedItem.ToString());
+            Console.WriteLine(Properties.Settings.Default.AuxDeviceID);
         }
         private void checkedListBoxVirtMic_ItemCheck(object sender, ItemCheckEventArgs e) {
             for (int ix = 0; ix < checkedListBoxVirtMic.Items.Count; ++ix)
@@ -159,18 +154,11 @@ namespace MicrophonePassthrough {
         }
         private void button2_Click_1(object sender, EventArgs e) {
             Properties.Settings.Default.Save();
-            MessageBox.Show("Saving [capture ID : playback ID]: " + Properties.Settings.Default.CaptureDeviceID.ToString() + " : " + Properties.Settings.Default.PlaybackDeviceID.ToString() + "\nRefreshing device list now..");
+            MessageBox.Show("Saving [capture ID : playback ID : Aux ID]: " + Properties.Settings.Default.CaptureDeviceID.ToString() + " : " + Properties.Settings.Default.PlaybackDeviceID.ToString() + " : " + Properties.Settings.Default.AuxDeviceID.ToString() + "\nRefreshing device list now..");
         }
         private void notifyIcon1_MouseDoubleClick(object sender, MouseEventArgs e) {
             Show();
             this.WindowState = FormWindowState.Normal;
-        }
-        private void Form1_Load(object sender, EventArgs e) {
-            pictureBox1.Image = Resources.micpassthroughmuted;
-            pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
-            pictureBox2.Image = Resources.micpassthroughmuted;
-            pictureBox2.SizeMode = PictureBoxSizeMode.StretchImage;
-            trackBar1.
         }
         private void timer1_Tick(object sender, EventArgs e) {
             int vadProb = (int)(getVadProbability() * 1000.0F);

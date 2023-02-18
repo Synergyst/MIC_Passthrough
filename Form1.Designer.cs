@@ -34,7 +34,6 @@ namespace MicrophonePassthrough
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            this.button1 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.label1 = new System.Windows.Forms.Label();
@@ -54,7 +53,6 @@ namespace MicrophonePassthrough
             this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.radioButton3 = new System.Windows.Forms.RadioButton();
             this.radioButton4 = new System.Windows.Forms.RadioButton();
-            this.button4 = new System.Windows.Forms.Button();
             this.progressBar3 = new System.Windows.Forms.ProgressBar();
             this.progressBar4 = new System.Windows.Forms.ProgressBar();
             this.timer3 = new System.Windows.Forms.Timer(this.components);
@@ -62,25 +60,15 @@ namespace MicrophonePassthrough
             this.timer5 = new System.Windows.Forms.Timer(this.components);
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.knobControl1 = new KnobControl.KnobControl();
-            this.knobControl2 = new KnobControl.KnobControl();
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
+            this.knobControl2 = new KnobControl.KnobControl();
+            this.knobControl1 = new KnobControl.KnobControl();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(207, 564);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(38, 23);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "Start";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click_1);
             // 
             // button3
             // 
@@ -264,16 +252,6 @@ namespace MicrophonePassthrough
             this.radioButton4.Text = "no-net";
             this.radioButton4.UseVisualStyleBackColor = true;
             // 
-            // button4
-            // 
-            this.button4.Location = new System.Drawing.Point(188, 644);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(57, 23);
-            this.button4.TabIndex = 21;
-            this.button4.Text = "Start Net";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
-            // 
             // progressBar3
             // 
             this.progressBar3.Location = new System.Drawing.Point(316, 615);
@@ -330,54 +308,6 @@ namespace MicrophonePassthrough
             this.pictureBox1.TabIndex = 24;
             this.pictureBox1.TabStop = false;
             // 
-            // knobControl1
-            // 
-            this.knobControl1.EndAngle = 405F;
-            this.knobControl1.ImeMode = System.Windows.Forms.ImeMode.On;
-            this.knobControl1.KnobBackColor = System.Drawing.Color.WhiteSmoke;
-            this.knobControl1.KnobPointerStyle = KnobControl.KnobControl.KnobPointerStyles.line;
-            this.knobControl1.LargeChange = 5;
-            this.knobControl1.Location = new System.Drawing.Point(251, 535);
-            this.knobControl1.Maximum = 100;
-            this.knobControl1.Minimum = 0;
-            this.knobControl1.Name = "knobControl1";
-            this.knobControl1.PointerColor = System.Drawing.Color.SlateBlue;
-            this.knobControl1.ScaleColor = System.Drawing.Color.Black;
-            this.knobControl1.ScaleDivisions = 11;
-            this.knobControl1.ScaleFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.knobControl1.ScaleSubDivisions = 4;
-            this.knobControl1.ShowLargeScale = true;
-            this.knobControl1.ShowSmallScale = false;
-            this.knobControl1.Size = new System.Drawing.Size(59, 59);
-            this.knobControl1.SmallChange = 1;
-            this.knobControl1.StartAngle = 135F;
-            this.knobControl1.TabIndex = 26;
-            this.knobControl1.Value = 0;
-            // 
-            // knobControl2
-            // 
-            this.knobControl2.EndAngle = 405F;
-            this.knobControl2.ImeMode = System.Windows.Forms.ImeMode.On;
-            this.knobControl2.KnobBackColor = System.Drawing.Color.WhiteSmoke;
-            this.knobControl2.KnobPointerStyle = KnobControl.KnobControl.KnobPointerStyles.line;
-            this.knobControl2.LargeChange = 5;
-            this.knobControl2.Location = new System.Drawing.Point(251, 615);
-            this.knobControl2.Maximum = 100;
-            this.knobControl2.Minimum = 0;
-            this.knobControl2.Name = "knobControl2";
-            this.knobControl2.PointerColor = System.Drawing.Color.SlateBlue;
-            this.knobControl2.ScaleColor = System.Drawing.Color.Black;
-            this.knobControl2.ScaleDivisions = 11;
-            this.knobControl2.ScaleFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.knobControl2.ScaleSubDivisions = 4;
-            this.knobControl2.ShowLargeScale = true;
-            this.knobControl2.ShowSmallScale = false;
-            this.knobControl2.Size = new System.Drawing.Size(59, 59);
-            this.knobControl2.SmallChange = 1;
-            this.knobControl2.StartAngle = 135F;
-            this.knobControl2.TabIndex = 27;
-            this.knobControl2.Value = 0;
-            // 
             // label6
             // 
             this.label6.AutoSize = true;
@@ -418,6 +348,54 @@ namespace MicrophonePassthrough
             this.label9.Text = "Volume";
             this.label9.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
+            // knobControl2
+            // 
+            this.knobControl2.EndAngle = 405F;
+            this.knobControl2.ImeMode = System.Windows.Forms.ImeMode.On;
+            this.knobControl2.KnobBackColor = System.Drawing.Color.WhiteSmoke;
+            this.knobControl2.KnobPointerStyle = KnobControl.KnobControl.KnobPointerStyles.line;
+            this.knobControl2.LargeChange = 5;
+            this.knobControl2.Location = new System.Drawing.Point(251, 615);
+            this.knobControl2.Maximum = 100;
+            this.knobControl2.Minimum = 0;
+            this.knobControl2.Name = "knobControl2";
+            this.knobControl2.PointerColor = System.Drawing.Color.SlateBlue;
+            this.knobControl2.ScaleColor = System.Drawing.Color.Black;
+            this.knobControl2.ScaleDivisions = 11;
+            this.knobControl2.ScaleFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.knobControl2.ScaleSubDivisions = 4;
+            this.knobControl2.ShowLargeScale = true;
+            this.knobControl2.ShowSmallScale = false;
+            this.knobControl2.Size = new System.Drawing.Size(59, 59);
+            this.knobControl2.SmallChange = 1;
+            this.knobControl2.StartAngle = 135F;
+            this.knobControl2.TabIndex = 27;
+            this.knobControl2.Value = 0;
+            // 
+            // knobControl1
+            // 
+            this.knobControl1.EndAngle = 405F;
+            this.knobControl1.ImeMode = System.Windows.Forms.ImeMode.On;
+            this.knobControl1.KnobBackColor = System.Drawing.Color.WhiteSmoke;
+            this.knobControl1.KnobPointerStyle = KnobControl.KnobControl.KnobPointerStyles.line;
+            this.knobControl1.LargeChange = 5;
+            this.knobControl1.Location = new System.Drawing.Point(251, 535);
+            this.knobControl1.Maximum = 100;
+            this.knobControl1.Minimum = 0;
+            this.knobControl1.Name = "knobControl1";
+            this.knobControl1.PointerColor = System.Drawing.Color.SlateBlue;
+            this.knobControl1.ScaleColor = System.Drawing.Color.Black;
+            this.knobControl1.ScaleDivisions = 11;
+            this.knobControl1.ScaleFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.knobControl1.ScaleSubDivisions = 4;
+            this.knobControl1.ShowLargeScale = true;
+            this.knobControl1.ShowSmallScale = false;
+            this.knobControl1.Size = new System.Drawing.Size(59, 59);
+            this.knobControl1.SmallChange = 1;
+            this.knobControl1.StartAngle = 135F;
+            this.knobControl1.TabIndex = 26;
+            this.knobControl1.Value = 0;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -435,7 +413,6 @@ namespace MicrophonePassthrough
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.progressBar4);
             this.Controls.Add(this.progressBar3);
-            this.Controls.Add(this.button4);
             this.Controls.Add(this.radioButton4);
             this.Controls.Add(this.radioButton3);
             this.Controls.Add(this.radioButton2);
@@ -452,7 +429,6 @@ namespace MicrophonePassthrough
             this.Controls.Add(this.checkedListBoxVirtMic);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button3);
-            this.Controls.Add(this.button1);
             this.HelpButton = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
@@ -467,7 +443,6 @@ namespace MicrophonePassthrough
         }
 
         #endregion
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button3;
         private NotifyIcon notifyIcon1;
         private Label label1;
@@ -487,7 +462,6 @@ namespace MicrophonePassthrough
         private RadioButton radioButton2;
         private RadioButton radioButton3;
         private RadioButton radioButton4;
-        private Button button4;
         private ProgressBar progressBar3;
         private ProgressBar progressBar4;
         private Timer timer3;

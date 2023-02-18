@@ -187,6 +187,8 @@ ClientBin/
 *.dbmdl
 *.dbproj.schemaview
 *.pfx
+*.crt
+*.key
 *.publishsettings
 node_modules/
 orleans.codegen.cs

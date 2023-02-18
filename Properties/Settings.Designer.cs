@@ -70,5 +70,17 @@ namespace MicrophonePassthrough.Properties {
                 this["CaptureDeviceName"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int AuxDeviceID {
+            get {
+                return ((int)(this["AuxDeviceID"]));
+            }
+            set {
+                this["AuxDeviceID"] = value;
+            }
+        }
     }
 }
