@@ -66,6 +66,8 @@ namespace MicrophonePassthrough
             this.label9 = new System.Windows.Forms.Label();
             this.knobControl2 = new KnobControl.KnobControl();
             this.knobControl1 = new KnobControl.KnobControl();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -331,21 +333,21 @@ namespace MicrophonePassthrough
             // label8
             // 
             this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.25F);
-            this.label8.Location = new System.Drawing.Point(255, 582);
+            this.label8.Location = new System.Drawing.Point(253, 594);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(50, 12);
             this.label8.TabIndex = 30;
-            this.label8.Text = "Volume";
+            this.label8.Text = "volume";
             this.label8.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // label9
             // 
             this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.25F);
-            this.label9.Location = new System.Drawing.Point(257, 662);
+            this.label9.Location = new System.Drawing.Point(253, 677);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(48, 12);
             this.label9.TabIndex = 31;
-            this.label9.Text = "Volume";
+            this.label9.Text = "volume";
             this.label9.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // knobControl2
@@ -396,6 +398,27 @@ namespace MicrophonePassthrough
             this.knobControl1.TabIndex = 26;
             this.knobControl1.Value = 0;
             // 
+            // label10
+            // 
+            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.25F);
+            this.label10.Location = new System.Drawing.Point(249, 582);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(59, 12);
+            this.label10.TabIndex = 32;
+            this.label10.Text = "virtual";
+            this.label10.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // label11
+            // 
+            this.label11.BackColor = System.Drawing.Color.Transparent;
+            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.25F);
+            this.label11.Location = new System.Drawing.Point(249, 664);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(59, 15);
+            this.label11.TabIndex = 33;
+            this.label11.Text = "network";
+            this.label11.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -403,6 +426,8 @@ namespace MicrophonePassthrough
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(212)))), ((int)(((byte)(212)))), ((int)(((byte)(255)))));
             this.ClientSize = new System.Drawing.Size(419, 688);
+            this.Controls.Add(this.label11);
+            this.Controls.Add(this.label10);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.label7);
@@ -475,6 +500,8 @@ namespace MicrophonePassthrough
         private Label label7;
         private Label label8;
         private Label label9;
+        private Label label10;
+        private Label label11;
     }
 }
 
