@@ -37,6 +37,10 @@ namespace MicrophonePassthrough {
         unsafe static extern int retDevNameList(StringBuilder playbackCount, StringBuilder captureCount, StringBuilder playbackListGUI, StringBuilder captureListGUI, int len);
         [System.Runtime.InteropServices.DllImport("MIC_Passthrough.dll")]
         unsafe static extern float getVadProbability();
+        [System.Runtime.InteropServices.DllImport("MIC_Passthrough.dll")]
+        unsafe static extern float getDecibel();
+        [System.Runtime.InteropServices.DllImport("MIC_Passthrough.dll")]
+        unsafe static extern float getAmplitude();
         private static bool firstRun1 = true;
         private static bool firstRun2 = true;
         private void button1_Click_1(object sender, EventArgs e) {
@@ -134,6 +138,32 @@ namespace MicrophonePassthrough {
             int vadProb = (int)(getVadProbability() * 1000.0F);
             progressBar1.Value = vadProb;
             progressBar1.Refresh();
+        }
+
+        private void timer2_Tick(object sender, EventArgs e)
+        {
+            /*int amplitudeLevel = (int)(get_average_amplitude() * 10000.0F);
+            progressBar2.Value = amplitudeLevel;
+            progressBar2.Refresh();
+            Console.WriteLine(amplitudeLevel.ToString());*/
+            int decibelLevel = (int)((getDecibel() + 60.0F) * 1.6667F);
+            var decibelLevelStr = decibelLevel.ToString();
+            if (decibelLevelStr != "-8" && decibelLevelStr != "0" && decibelLevelStr != "-2147483648")
+            {
+                //Console.WriteLine(decibelLevelStr);
+            }
+            if (decibelLevel > 0)
+            {
+                progressBar2.Value = decibelLevel;
+                progressBar2.Refresh();
+            } else {
+                if (progressBar2.Value > 0)
+                {
+                    progressBar2.Value = progressBar2.Value - 1;
+                    progressBar2.Refresh();
+                }
+            }
+            //Console.WriteLine(decibelLevel.ToString());
         }
     }
 }

@@ -6,6 +6,7 @@
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
 #define EXPORT __declspec(dllexport)
 #define M_PI 3.14159265358979323846264338327
+#define FRAME_LENGTH 480
 #include <WinSock.h>
 #include <stdio.h>
 #include <assert.h>
@@ -43,13 +44,48 @@ EXPORT int startMicPassthrough(int, int);
 EXPORT int retDevNameList(char* playbackCount, char* captureCount, char* playbackListGUI, char* captureListGUI, int len);
 EXPORT void deinitAll();
 EXPORT float getVadProbability();
+EXPORT float getDecibel();
+EXPORT float getAmplitude();
 WSADATA wsaData;
 SOCKET sockU, sock_control;
 struct sockaddr_in server_addrU;
 int bytes_sentU, retU;
-float vadProbability = 0.0F;
+float vadProbability = 0.0F, dB_avg = 0.0F, ampl_avg = 0.0F;
+float get_average_decibel(short frames[], int length) {
+  float dB_sum = 0.0;
+  for (int i = 0; i < length; i++) {
+    // Calculate the decibel level of the frame.
+    float abs_sample = fabsf((float)frames[i]);
+    float dB = 20.0f * log10f(abs_sample / 32768.0f);
+    // Add the decibel level to the running total.
+    dB_sum += dB;
+  }
+  // Calculate the average decibel level.
+  float average_dB = dB_sum / length;
+  return average_dB;
+}
+float get_average_amplitude(short frames[], int length) {
+  float amplitude_sum = 0.0;
+  for (int i = 0; i < length; i++) {
+    // Convert the signed 16-bit value to a floating point value between -1 and 1.
+    float sample = (float)frames[i] / 32768.0;
+    // Take the absolute value of the sample to get the amplitude.
+    float amplitude = fabsf(sample);
+    // Add the amplitude to the running total.
+    amplitude_sum += amplitude;
+  }
+  // Calculate the average amplitude.
+  float average_amplitude = amplitude_sum / length;
+  return average_amplitude;
+}
 float getVadProbability() {
   return vadProbability;
+}
+float getDecibel() {
+  return dB_avg;
+}
+float getAmplitude() {
+  return ampl_avg;
 }
 int netInitUDP(const char* host, int port) {
   sockU = INVALID_SOCKET;
@@ -114,6 +150,8 @@ float noiseReductionProcessor(ma_device* pDevice, void* pOutput, const void* pIn
     ma_convert_pcm_frames_format(pOutput, ma_format_s16, tempIn, ma_format_s16, (frameCount), 1, ma_dither_mode_none);
     ma_convert_pcm_frames_format(netOut, ma_format_u8, tempIn, ma_format_s16, (frameCount), 1, ma_dither_mode_none);
     netSendUDP(netOut, frameCount * sizeof(unsigned char));
+    dB_avg = get_average_decibel(tempIn, frameCount);
+    ampl_avg = get_average_amplitude(tempIn, frameCount);
     free(netOut);
     free(tempIn);
     free(tempOut);
@@ -358,6 +396,8 @@ int startMicPassthrough(int captureDev, int playbackDev) {
   spawnNewMiniaudioThread(0, 0, &captureDevList[0], &playbackDevList[0]);
   while (true) {
     //fprintf(stderr, "VAD: %.4f\n", vadProbability);
+    //fprintf(stderr, "dB: %f\n", get_average_decibel());
+    //fprintf(stderr, "Amplitude: %f\n", get_average_amplitude() * 10000.0F);
     Sleep(500);
   }
   deinitAll();

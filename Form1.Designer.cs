@@ -47,6 +47,9 @@ namespace MicrophonePassthrough
             this.label3 = new System.Windows.Forms.Label();
             this.checkedListBoxAuxMic = new System.Windows.Forms.CheckedListBox();
             this.label4 = new System.Windows.Forms.Label();
+            this.progressBar2 = new System.Windows.Forms.ProgressBar();
+            this.label5 = new System.Windows.Forms.Label();
+            this.timer2 = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // button1
@@ -136,7 +139,7 @@ namespace MicrophonePassthrough
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(103, 6);
+            this.progressBar1.Location = new System.Drawing.Point(174, 190);
             this.progressBar1.MarqueeAnimationSpeed = 1;
             this.progressBar1.Maximum = 1000;
             this.progressBar1.Name = "progressBar1";
@@ -149,11 +152,11 @@ namespace MicrophonePassthrough
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.25F);
-            this.label3.Location = new System.Drawing.Point(6, 4);
+            this.label3.Location = new System.Drawing.Point(106, 189);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(95, 12);
+            this.label3.Size = new System.Drawing.Size(62, 12);
             this.label3.TabIndex = 12;
-            this.label3.Text = "Voice activity amount";
+            this.label3.Text = "Voice activity";
             // 
             // checkedListBoxAuxMic
             // 
@@ -175,6 +178,31 @@ namespace MicrophonePassthrough
             this.label4.TabIndex = 14;
             this.label4.Text = "AUX Microphone";
             // 
+            // progressBar2
+            // 
+            this.progressBar2.Location = new System.Drawing.Point(316, 190);
+            this.progressBar2.Name = "progressBar2";
+            this.progressBar2.Size = new System.Drawing.Size(100, 11);
+            this.progressBar2.Step = 1;
+            this.progressBar2.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+            this.progressBar2.TabIndex = 15;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.25F);
+            this.label5.Location = new System.Drawing.Point(269, 189);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(45, 12);
+            this.label5.TabIndex = 16;
+            this.label5.Text = "Loudness";
+            // 
+            // timer2
+            // 
+            this.timer2.Enabled = true;
+            this.timer2.Interval = 25;
+            this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -182,6 +210,8 @@ namespace MicrophonePassthrough
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(212)))), ((int)(((byte)(212)))), ((int)(((byte)(255)))));
             this.ClientSize = new System.Drawing.Size(419, 535);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.progressBar2);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.checkedListBoxAuxMic);
             this.Controls.Add(this.label3);
@@ -218,6 +248,9 @@ namespace MicrophonePassthrough
         private Label label3;
         private CheckedListBox checkedListBoxAuxMic;
         private Label label4;
+        private ProgressBar progressBar2;
+        private Label label5;
+        private Timer timer2;
     }
 }
 
