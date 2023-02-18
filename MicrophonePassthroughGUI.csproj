@@ -150,6 +150,12 @@
   <ItemGroup>
     <None Include="micpassthroughmuted.png" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="KnobControl\KnobControl.csproj">
+      <Project>{04123f59-331d-4582-be0d-721feab6050f}</Project>
+      <Name>KnobControl</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>
