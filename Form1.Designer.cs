@@ -66,13 +66,15 @@ namespace MicrophonePassthrough
             this.knobControl2 = new KnobControl.KnobControl();
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(70, 533);
+            this.button1.Location = new System.Drawing.Point(207, 564);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(38, 23);
             this.button1.TabIndex = 1;
@@ -157,7 +159,7 @@ namespace MicrophonePassthrough
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(145, 535);
+            this.progressBar1.Location = new System.Drawing.Point(316, 535);
             this.progressBar1.MarqueeAnimationSpeed = 1;
             this.progressBar1.Maximum = 1000;
             this.progressBar1.Name = "progressBar1";
@@ -170,7 +172,7 @@ namespace MicrophonePassthrough
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.25F);
-            this.label3.Location = new System.Drawing.Point(143, 550);
+            this.label3.Location = new System.Drawing.Point(354, 549);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(62, 12);
             this.label3.TabIndex = 12;
@@ -198,7 +200,7 @@ namespace MicrophonePassthrough
             // 
             // progressBar2
             // 
-            this.progressBar2.Location = new System.Drawing.Point(316, 536);
+            this.progressBar2.Location = new System.Drawing.Point(316, 564);
             this.progressBar2.MarqueeAnimationSpeed = 1;
             this.progressBar2.Name = "progressBar2";
             this.progressBar2.Size = new System.Drawing.Size(100, 11);
@@ -210,7 +212,7 @@ namespace MicrophonePassthrough
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.25F);
-            this.label5.Location = new System.Drawing.Point(362, 550);
+            this.label5.Location = new System.Drawing.Point(371, 578);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(45, 12);
             this.label5.TabIndex = 16;
@@ -264,7 +266,7 @@ namespace MicrophonePassthrough
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(53, 636);
+            this.button4.Location = new System.Drawing.Point(188, 644);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(57, 23);
             this.button4.TabIndex = 21;
@@ -274,7 +276,7 @@ namespace MicrophonePassthrough
             // 
             // progressBar3
             // 
-            this.progressBar3.Location = new System.Drawing.Point(145, 648);
+            this.progressBar3.Location = new System.Drawing.Point(316, 615);
             this.progressBar3.MarqueeAnimationSpeed = 1;
             this.progressBar3.Maximum = 1000;
             this.progressBar3.Name = "progressBar3";
@@ -313,7 +315,7 @@ namespace MicrophonePassthrough
             // 
             // pictureBox2
             // 
-            this.pictureBox2.Location = new System.Drawing.Point(116, 636);
+            this.pictureBox2.Location = new System.Drawing.Point(222, 615);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(23, 23);
             this.pictureBox2.TabIndex = 25;
@@ -322,7 +324,7 @@ namespace MicrophonePassthrough
             // pictureBox1
             // 
             this.pictureBox1.InitialImage = null;
-            this.pictureBox1.Location = new System.Drawing.Point(114, 533);
+            this.pictureBox1.Location = new System.Drawing.Point(222, 535);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(23, 23);
             this.pictureBox1.TabIndex = 24;
@@ -380,7 +382,7 @@ namespace MicrophonePassthrough
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.25F);
-            this.label6.Location = new System.Drawing.Point(143, 662);
+            this.label6.Location = new System.Drawing.Point(354, 629);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(62, 12);
             this.label6.TabIndex = 28;
@@ -396,6 +398,26 @@ namespace MicrophonePassthrough
             this.label7.TabIndex = 29;
             this.label7.Text = "Loudness";
             // 
+            // label8
+            // 
+            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.25F);
+            this.label8.Location = new System.Drawing.Point(255, 582);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(50, 12);
+            this.label8.TabIndex = 30;
+            this.label8.Text = "Volume";
+            this.label8.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // label9
+            // 
+            this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.25F);
+            this.label9.Location = new System.Drawing.Point(257, 662);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(48, 12);
+            this.label9.TabIndex = 31;
+            this.label9.Text = "Volume";
+            this.label9.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -403,6 +425,8 @@ namespace MicrophonePassthrough
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(212)))), ((int)(((byte)(212)))), ((int)(((byte)(255)))));
             this.ClientSize = new System.Drawing.Size(419, 688);
+            this.Controls.Add(this.label9);
+            this.Controls.Add(this.label8);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.knobControl2);
@@ -475,6 +499,8 @@ namespace MicrophonePassthrough
         private KnobControl.KnobControl knobControl2;
         private Label label6;
         private Label label7;
+        private Label label8;
+        private Label label9;
     }
 }
 
