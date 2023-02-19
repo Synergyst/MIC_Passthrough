@@ -97,6 +97,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <CLRUnmanagedCodeCheck>true</CLRUnmanagedCodeCheck>
+      <CLRSupportLastError>Enabled</CLRSupportLastError>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
