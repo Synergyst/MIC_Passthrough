@@ -44,7 +44,7 @@ namespace MicPassthroughAndRemoteMic {
         [System.Runtime.InteropServices.DllImport("MIC_Passthrough.dll")]
         unsafe static extern bool transmitState();
         [System.Runtime.InteropServices.DllImport("MIC_Passthrough.dll")]
-        unsafe static extern void setVolume(int volume);
+        unsafe static extern void setVolume(int volume, bool shouldAmplify);
         [System.Runtime.InteropServices.DllImport("MIC_Passthrough_Net.dll")]
         unsafe static extern int startMicPassthrough_net(int captureDev, int playbackDev);
         [System.Runtime.InteropServices.DllImport("MIC_Passthrough_Net.dll")]
@@ -54,7 +54,7 @@ namespace MicPassthroughAndRemoteMic {
         [System.Runtime.InteropServices.DllImport("MIC_Passthrough_Net.dll")]
         unsafe static extern bool transmitState_net();
         [System.Runtime.InteropServices.DllImport("MIC_Passthrough_Net.dll")]
-        unsafe static extern void setVolume_net(int volume);
+        unsafe static extern void setVolume_net(int volume, bool shouldAmplify);
         private static bool firstRun1 = true;
         private static bool firstRun2 = true;
         private void Form1_Load(object sender, EventArgs e) {
@@ -108,6 +108,8 @@ namespace MicPassthroughAndRemoteMic {
             micThrNet.Start();
             knobControl2.Value = Properties.Settings.Default.RemoteDeviceVolume;
             knobControl1.Value = Properties.Settings.Default.LocalDeviceVolume;
+            checkBox1.Checked = Properties.Settings.Default.LocalDeviceAmplifed;
+            checkBox2.Checked = Properties.Settings.Default.RemoteDeviceAmplifed;
             //
         }
         private static void micFunc() {
@@ -218,14 +220,18 @@ namespace MicPassthroughAndRemoteMic {
             Properties.Settings.Default.Save();
         }
         private void timer6_Tick(object sender, EventArgs e) {
-            setVolume(knobControl1.Value);
-            setVolume_net(knobControl2.Value);
+            setVolume(knobControl1.Value, checkBox1.Checked);
+            setVolume_net(knobControl2.Value, checkBox2.Checked);
         }
         private void checkBox1_CheckedChanged(object sender, EventArgs e) {
             //setAmplified(checkBox1.Checked);
+            Properties.Settings.Default.LocalDeviceAmplifed = checkBox1.Checked;
+            Properties.Settings.Default.Save();
         }
         private void checkBox2_CheckedChanged(object sender, EventArgs e) {
             //setAmplified_net(checkBox2.Checked);
+            Properties.Settings.Default.RemoteDeviceAmplifed = checkBox2.Checked;
+            Properties.Settings.Default.Save();
         }
         private void timer2_Tick(object sender, EventArgs e) {
             if (transmitState()) {

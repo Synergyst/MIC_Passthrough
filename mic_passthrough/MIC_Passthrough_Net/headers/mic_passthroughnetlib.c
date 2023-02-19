@@ -47,7 +47,7 @@ EXPORT void deinitAll_net();*/
 EXPORT float getVadProbability_net();
 EXPORT float getDecibel_net();
 EXPORT bool transmitState_net();
-EXPORT void setVolume_net(int volume);
+EXPORT void setVolume_net(int volume, bool shouldAmplify);
 //EXPORT float getAmplitude_net();
 WSADATA wsaData;
 SOCKET sockU, sock_control;
@@ -76,8 +76,13 @@ DWORD WINAPI keyPressesThread(LPVOID lpParameter) {
   }
   return 0;
 }
-void setVolume_net(int vol) {
-  volume = (float)vol / 100.0F;
+void setVolume_net(int vol, bool shouldAmplify) {
+  int n_dB = 15;
+  if (shouldAmplify) {
+    volume = ((float)vol / 100.0F) * powf(10.0f, (float)n_dB / 20.0f);
+  } else {
+    volume = (float)vol / 100.0F;
+  }
 }
 bool transmitState_net() {
   return isToggled;

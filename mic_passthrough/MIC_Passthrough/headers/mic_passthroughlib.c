@@ -48,7 +48,7 @@ EXPORT float getVadProbability();
 EXPORT float getDecibel();
 EXPORT float getAmplitude();
 EXPORT bool transmitState();
-EXPORT void setVolume(int volume);
+EXPORT void setVolume(int volume, bool shouldAmplify);
 WSADATA wsaData;
 SOCKET sockU, sock_control;
 struct sockaddr_in server_addrU;
@@ -76,8 +76,13 @@ DWORD WINAPI keyPressesThread(LPVOID lpParameter) {
   }
   return 0;
 }
-void setVolume(int vol) {
-  volume = (float)vol / 100.0F;
+void setVolume(int vol, bool shouldAmplify) {
+  int n_dB = 15;
+  if (shouldAmplify) {
+    volume = ((float)vol / 100.0F) * powf(10.0f, (float)n_dB / 20.0f);
+  } else {
+    volume = (float)vol / 100.0F;
+  }
 }
 bool transmitState() {
   return isToggled;

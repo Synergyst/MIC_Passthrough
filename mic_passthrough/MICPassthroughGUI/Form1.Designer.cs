@@ -63,13 +63,13 @@ namespace MicPassthroughAndRemoteMic {
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
-            this.knobControl2 = new KnobControl.KnobControl();
-            this.knobControl1 = new KnobControl.KnobControl();
             this.label10 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.timer6 = new System.Windows.Forms.Timer(this.components);
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.checkBox2 = new System.Windows.Forms.CheckBox();
+            this.knobControl2 = new KnobControl.KnobControl();
+            this.knobControl1 = new KnobControl.KnobControl();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -352,58 +352,6 @@ namespace MicPassthroughAndRemoteMic {
             this.label9.Text = "volume";
             this.label9.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
-            // knobControl2
-            // 
-            this.knobControl2.EndAngle = 405F;
-            this.knobControl2.ImeMode = System.Windows.Forms.ImeMode.On;
-            this.knobControl2.KnobBackColor = System.Drawing.Color.WhiteSmoke;
-            this.knobControl2.KnobPointerStyle = KnobControl.KnobControl.KnobPointerStyles.line;
-            this.knobControl2.LargeChange = 5;
-            this.knobControl2.Location = new System.Drawing.Point(275, 615);
-            this.knobControl2.Maximum = 100;
-            this.knobControl2.Minimum = 0;
-            this.knobControl2.Name = "knobControl2";
-            this.knobControl2.PointerColor = System.Drawing.Color.SlateBlue;
-            this.knobControl2.ScaleColor = System.Drawing.Color.Black;
-            this.knobControl2.ScaleDivisions = 11;
-            this.knobControl2.ScaleFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.knobControl2.ScaleSubDivisions = 4;
-            this.knobControl2.ShowLargeScale = true;
-            this.knobControl2.ShowSmallScale = false;
-            this.knobControl2.Size = new System.Drawing.Size(59, 59);
-            this.knobControl2.SmallChange = 1;
-            this.knobControl2.StartAngle = 135F;
-            this.knobControl2.TabIndex = 27;
-            this.knobControl2.Value = 100;
-            this.knobControl2.Load += new System.EventHandler(this.knobControl2_Load);
-            this.knobControl2.ValueChanged += new KnobControl.ValueChangedEventHandler(this.knobControl2_ValueChanged);
-            // 
-            // knobControl1
-            // 
-            this.knobControl1.EndAngle = 405F;
-            this.knobControl1.ImeMode = System.Windows.Forms.ImeMode.On;
-            this.knobControl1.KnobBackColor = System.Drawing.Color.WhiteSmoke;
-            this.knobControl1.KnobPointerStyle = KnobControl.KnobControl.KnobPointerStyles.line;
-            this.knobControl1.LargeChange = 5;
-            this.knobControl1.Location = new System.Drawing.Point(275, 535);
-            this.knobControl1.Maximum = 100;
-            this.knobControl1.Minimum = 0;
-            this.knobControl1.Name = "knobControl1";
-            this.knobControl1.PointerColor = System.Drawing.Color.SlateBlue;
-            this.knobControl1.ScaleColor = System.Drawing.Color.Black;
-            this.knobControl1.ScaleDivisions = 11;
-            this.knobControl1.ScaleFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.knobControl1.ScaleSubDivisions = 4;
-            this.knobControl1.ShowLargeScale = true;
-            this.knobControl1.ShowSmallScale = false;
-            this.knobControl1.Size = new System.Drawing.Size(59, 59);
-            this.knobControl1.SmallChange = 1;
-            this.knobControl1.StartAngle = 135F;
-            this.knobControl1.TabIndex = 26;
-            this.knobControl1.Value = 100;
-            this.knobControl1.Load += new System.EventHandler(this.knobControl1_Load);
-            this.knobControl1.ValueChanged += new KnobControl.ValueChangedEventHandler(this.knobControl1_ValueChanged);
-            // 
             // label10
             // 
             this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.25F);
@@ -435,11 +383,11 @@ namespace MicPassthroughAndRemoteMic {
             // 
             this.checkBox1.AutoSize = true;
             this.checkBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.25F);
-            this.checkBox1.Location = new System.Drawing.Point(371, 593);
+            this.checkBox1.Location = new System.Drawing.Point(366, 593);
             this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(45, 16);
+            this.checkBox1.Size = new System.Drawing.Size(50, 16);
             this.checkBox1.TabIndex = 34;
-            this.checkBox1.Text = "+3dB";
+            this.checkBox1.Text = "+15dB";
             this.checkBox1.UseVisualStyleBackColor = true;
             this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
@@ -447,13 +395,65 @@ namespace MicPassthroughAndRemoteMic {
             // 
             this.checkBox2.AutoSize = true;
             this.checkBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.25F);
-            this.checkBox2.Location = new System.Drawing.Point(371, 677);
+            this.checkBox2.Location = new System.Drawing.Point(366, 677);
             this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(45, 16);
+            this.checkBox2.Size = new System.Drawing.Size(50, 16);
             this.checkBox2.TabIndex = 35;
-            this.checkBox2.Text = "+3dB";
+            this.checkBox2.Text = "+15dB";
             this.checkBox2.UseVisualStyleBackColor = true;
             this.checkBox2.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
+            // 
+            // knobControl2
+            // 
+            this.knobControl2.EndAngle = 405F;
+            this.knobControl2.ImeMode = System.Windows.Forms.ImeMode.On;
+            this.knobControl2.KnobBackColor = System.Drawing.Color.WhiteSmoke;
+            this.knobControl2.KnobPointerStyle = KnobControl.KnobControl.KnobPointerStyles.line;
+            this.knobControl2.LargeChange = 5;
+            this.knobControl2.Location = new System.Drawing.Point(275, 615);
+            this.knobControl2.Maximum = 100;
+            this.knobControl2.Minimum = 0;
+            this.knobControl2.Name = "knobControl2";
+            this.knobControl2.PointerColor = System.Drawing.Color.SlateBlue;
+            this.knobControl2.ScaleColor = System.Drawing.Color.Black;
+            this.knobControl2.ScaleDivisions = 11;
+            this.knobControl2.ScaleFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.knobControl2.ScaleSubDivisions = 4;
+            this.knobControl2.ShowLargeScale = true;
+            this.knobControl2.ShowSmallScale = false;
+            this.knobControl2.Size = new System.Drawing.Size(59, 59);
+            this.knobControl2.SmallChange = 1;
+            this.knobControl2.StartAngle = 135F;
+            this.knobControl2.TabIndex = 27;
+            this.knobControl2.Value = 100;
+            this.knobControl2.ValueChanged += new KnobControl.ValueChangedEventHandler(this.knobControl2_ValueChanged);
+            this.knobControl2.Load += new System.EventHandler(this.knobControl2_Load);
+            // 
+            // knobControl1
+            // 
+            this.knobControl1.EndAngle = 405F;
+            this.knobControl1.ImeMode = System.Windows.Forms.ImeMode.On;
+            this.knobControl1.KnobBackColor = System.Drawing.Color.WhiteSmoke;
+            this.knobControl1.KnobPointerStyle = KnobControl.KnobControl.KnobPointerStyles.line;
+            this.knobControl1.LargeChange = 5;
+            this.knobControl1.Location = new System.Drawing.Point(275, 535);
+            this.knobControl1.Maximum = 100;
+            this.knobControl1.Minimum = 0;
+            this.knobControl1.Name = "knobControl1";
+            this.knobControl1.PointerColor = System.Drawing.Color.SlateBlue;
+            this.knobControl1.ScaleColor = System.Drawing.Color.Black;
+            this.knobControl1.ScaleDivisions = 11;
+            this.knobControl1.ScaleFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
+            this.knobControl1.ScaleSubDivisions = 4;
+            this.knobControl1.ShowLargeScale = true;
+            this.knobControl1.ShowSmallScale = false;
+            this.knobControl1.Size = new System.Drawing.Size(59, 59);
+            this.knobControl1.SmallChange = 1;
+            this.knobControl1.StartAngle = 135F;
+            this.knobControl1.TabIndex = 26;
+            this.knobControl1.Value = 100;
+            this.knobControl1.ValueChanged += new KnobControl.ValueChangedEventHandler(this.knobControl1_ValueChanged);
+            this.knobControl1.Load += new System.EventHandler(this.knobControl1_Load);
             // 
             // Form1
             // 
