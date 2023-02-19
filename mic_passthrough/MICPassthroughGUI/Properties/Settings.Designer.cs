@@ -82,5 +82,53 @@ namespace MicPassthroughAndRemoteMic.Properties {
                 this["AuxDeviceID"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool LocalDeviceAmplifed {
+            get {
+                return ((bool)(this["LocalDeviceAmplifed"]));
+            }
+            set {
+                this["LocalDeviceAmplifed"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool RemoteDeviceAmplifed {
+            get {
+                return ((bool)(this["RemoteDeviceAmplifed"]));
+            }
+            set {
+                this["RemoteDeviceAmplifed"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        public int LocalDeviceVolume {
+            get {
+                return ((int)(this["LocalDeviceVolume"]));
+            }
+            set {
+                this["LocalDeviceVolume"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        public int RemoteDeviceVolume {
+            get {
+                return ((int)(this["RemoteDeviceVolume"]));
+            }
+            set {
+                this["RemoteDeviceVolume"] = value;
+            }
+        }
     }
 }

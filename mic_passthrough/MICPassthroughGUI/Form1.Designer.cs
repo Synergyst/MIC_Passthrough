@@ -1,4 +1,5 @@
 ﻿
+using KnobControl;
 using System;
 using System.Windows.Forms;
 
@@ -375,6 +376,7 @@ namespace MicPassthroughAndRemoteMic {
             this.knobControl2.TabIndex = 27;
             this.knobControl2.Value = 100;
             this.knobControl2.Load += new System.EventHandler(this.knobControl2_Load);
+            this.knobControl2.ValueChanged += new KnobControl.ValueChangedEventHandler(this.knobControl2_ValueChanged);
             // 
             // knobControl1
             // 
@@ -400,6 +402,7 @@ namespace MicPassthroughAndRemoteMic {
             this.knobControl1.TabIndex = 26;
             this.knobControl1.Value = 100;
             this.knobControl1.Load += new System.EventHandler(this.knobControl1_Load);
+            this.knobControl1.ValueChanged += new KnobControl.ValueChangedEventHandler(this.knobControl1_ValueChanged);
             // 
             // label10
             // 
@@ -438,6 +441,7 @@ namespace MicPassthroughAndRemoteMic {
             this.checkBox1.TabIndex = 34;
             this.checkBox1.Text = "+3dB";
             this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // checkBox2
             // 
@@ -449,6 +453,7 @@ namespace MicPassthroughAndRemoteMic {
             this.checkBox2.TabIndex = 35;
             this.checkBox2.Text = "+3dB";
             this.checkBox2.UseVisualStyleBackColor = true;
+            this.checkBox2.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
             // 
             // Form1
             // 

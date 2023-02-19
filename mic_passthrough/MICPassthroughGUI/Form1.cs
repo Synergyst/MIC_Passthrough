@@ -106,6 +106,9 @@ namespace MicPassthroughAndRemoteMic {
             micThrNet.IsBackground = true;
             micThrNet.DisableComObjectEagerCleanup();
             micThrNet.Start();
+            knobControl2.Value = Properties.Settings.Default.RemoteDeviceVolume;
+            knobControl1.Value = Properties.Settings.Default.LocalDeviceVolume;
+            //
         }
         private static void micFunc() {
             while (true) {
@@ -206,9 +209,23 @@ namespace MicPassthroughAndRemoteMic {
         private void knobControl2_Load(object sender, EventArgs e) {
             //
         }
+        private void knobControl1_ValueChanged(object sender) {
+            Properties.Settings.Default.LocalDeviceVolume = knobControl1.Value;
+            Properties.Settings.Default.Save();
+        }
+        private void knobControl2_ValueChanged(object sender) {
+            Properties.Settings.Default.RemoteDeviceVolume = knobControl2.Value;
+            Properties.Settings.Default.Save();
+        }
         private void timer6_Tick(object sender, EventArgs e) {
             setVolume(knobControl1.Value);
             setVolume_net(knobControl2.Value);
+        }
+        private void checkBox1_CheckedChanged(object sender, EventArgs e) {
+            //setAmplified(checkBox1.Checked);
+        }
+        private void checkBox2_CheckedChanged(object sender, EventArgs e) {
+            //setAmplified_net(checkBox2.Checked);
         }
         private void timer2_Tick(object sender, EventArgs e) {
             if (transmitState()) {
