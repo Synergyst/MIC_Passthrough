@@ -450,7 +450,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Mic Passthrough + Remote Mic"
         "ProductCode" = "8:{7B03F476-00CB-4519-9D5D-F5B51A2E7AF4}"
-        "PackageCode" = "8:{6700B202-3F02-45E7-AB4A-1D05C1A7E5F8}"
+        "PackageCode" = "8:{4BB99411-C8FA-4759-A1F5-0D5D83F5D789}"
         "UpgradeCode" = "8:{A98118B6-3EF0-46EF-B94F-1EE0F8E88F4B}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
@@ -472,7 +472,7 @@
         "SearchPath" = "8:"
         "UseSystemSearchPath" = "11:TRUE"
         "TargetPlatform" = "3:1"
-        "PreBuildEvent" = "8:"
+        "PreBuildEvent" = "8:C:\\Users\\colet\\source\\repos\\MicrophonePassthrough\\signsetup.bat"
         "PostBuildEvent" = "8:"
         "RunPostBuildEvent" = "3:0"
         }
