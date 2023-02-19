@@ -76,10 +76,14 @@ DWORD WINAPI keyPressesThread(LPVOID lpParameter) {
   }
   return 0;
 }
+float amplify_by_db(float audioSplice, int n_dB) {
+  float gain = powf(10.0f, (float)n_dB / 20.0f);
+  return audioSplice *= gain;
+}
 void setVolume(int vol, bool shouldAmplify) {
   int n_dB = 15;
   if (shouldAmplify) {
-    volume = ((float)vol / 100.0F) * powf(10.0f, (float)n_dB / 20.0f);
+    volume = amplify_by_db(((float)vol / 100.0F), n_dB);
   } else {
     volume = (float)vol / 100.0F;
   }

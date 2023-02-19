@@ -29,5 +29,8 @@
     <Setting Name="RemoteDeviceVolume" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">100</Value>
     </Setting>
+    <Setting Name="RemoteDeviceIP" Type="System.String" Scope="User">
+      <Value Profile="(Default)">192.168.168.170</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

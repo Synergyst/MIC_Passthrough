@@ -130,5 +130,17 @@ namespace MicPassthroughAndRemoteMic.Properties {
                 this["RemoteDeviceVolume"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("192.168.168.170")]
+        public string RemoteDeviceIP {
+            get {
+                return ((string)(this["RemoteDeviceIP"]));
+            }
+            set {
+                this["RemoteDeviceIP"] = value;
+            }
+        }
     }
 }

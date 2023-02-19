@@ -70,6 +70,7 @@ namespace MicPassthroughAndRemoteMic {
             this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.knobControl2 = new KnobControl.KnobControl();
             this.knobControl1 = new KnobControl.KnobControl();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -455,6 +456,17 @@ namespace MicPassthroughAndRemoteMic {
             this.knobControl1.ValueChanged += new KnobControl.ValueChangedEventHandler(this.knobControl1_ValueChanged);
             this.knobControl1.Load += new System.EventHandler(this.knobControl1_Load);
             // 
+            // textBox1
+            // 
+            this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.25F);
+            this.textBox1.Location = new System.Drawing.Point(3, 536);
+            this.textBox1.MaxLength = 16;
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(94, 18);
+            this.textBox1.TabIndex = 36;
+            this.textBox1.Text = "192.168.168.170";
+            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -462,6 +474,7 @@ namespace MicPassthroughAndRemoteMic {
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(212)))), ((int)(((byte)(212)))), ((int)(((byte)(255)))));
             this.ClientSize = new System.Drawing.Size(419, 697);
+            this.Controls.Add(this.textBox1);
             this.Controls.Add(this.checkBox2);
             this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.label11);
@@ -543,6 +556,7 @@ namespace MicPassthroughAndRemoteMic {
         private Timer timer6;
         private CheckBox checkBox1;
         private CheckBox checkBox2;
+        private TextBox textBox1;
     }
 }
 

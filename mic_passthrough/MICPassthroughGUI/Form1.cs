@@ -55,6 +55,8 @@ namespace MicPassthroughAndRemoteMic {
         unsafe static extern bool transmitState_net();
         [System.Runtime.InteropServices.DllImport("MIC_Passthrough_Net.dll")]
         unsafe static extern void setVolume_net(int volume, bool shouldAmplify);
+        [System.Runtime.InteropServices.DllImport("MIC_Passthrough_Net.dll")]
+        unsafe static extern void setIpAddr(String ip);
         private static bool firstRun1 = true;
         private static bool firstRun2 = true;
         private void Form1_Load(object sender, EventArgs e) {
@@ -97,6 +99,16 @@ namespace MicPassthroughAndRemoteMic {
             } else {
                 firstRun2 = false;
             }
+            //
+            knobControl2.Value = Properties.Settings.Default.RemoteDeviceVolume;
+            knobControl1.Value = Properties.Settings.Default.LocalDeviceVolume;
+            checkBox1.Checked = Properties.Settings.Default.LocalDeviceAmplifed;
+            checkBox2.Checked = Properties.Settings.Default.RemoteDeviceAmplifed;
+            textBox1.Text = Properties.Settings.Default.RemoteDeviceIP;
+            setVolume(knobControl1.Value, checkBox1.Checked);
+            setVolume_net(knobControl2.Value, checkBox2.Checked);
+            setIpAddr(textBox1.Text);
+            //
             micThr = new Thread(micFunc);
             micThr.IsBackground = true;
             micThr.DisableComObjectEagerCleanup();
@@ -106,10 +118,6 @@ namespace MicPassthroughAndRemoteMic {
             micThrNet.IsBackground = true;
             micThrNet.DisableComObjectEagerCleanup();
             micThrNet.Start();
-            knobControl2.Value = Properties.Settings.Default.RemoteDeviceVolume;
-            knobControl1.Value = Properties.Settings.Default.LocalDeviceVolume;
-            checkBox1.Checked = Properties.Settings.Default.LocalDeviceAmplifed;
-            checkBox2.Checked = Properties.Settings.Default.RemoteDeviceAmplifed;
             //
         }
         private static void micFunc() {
@@ -231,6 +239,10 @@ namespace MicPassthroughAndRemoteMic {
         private void checkBox2_CheckedChanged(object sender, EventArgs e) {
             //setAmplified_net(checkBox2.Checked);
             Properties.Settings.Default.RemoteDeviceAmplifed = checkBox2.Checked;
+            Properties.Settings.Default.Save();
+        }
+        private void textBox1_TextChanged(object sender, EventArgs e) {
+            Properties.Settings.Default.RemoteDeviceIP = textBox1.Text;
             Properties.Settings.Default.Save();
         }
         private void timer2_Tick(object sender, EventArgs e) {

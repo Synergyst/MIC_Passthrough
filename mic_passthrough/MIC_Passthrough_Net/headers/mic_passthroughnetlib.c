@@ -48,6 +48,7 @@ EXPORT float getVadProbability_net();
 EXPORT float getDecibel_net();
 EXPORT bool transmitState_net();
 EXPORT void setVolume_net(int volume, bool shouldAmplify);
+EXPORT void setIpAddr(char* ip);
 //EXPORT float getAmplitude_net();
 WSADATA wsaData;
 SOCKET sockU, sock_control;
@@ -58,6 +59,7 @@ bool prevCycleForwardDownState = false, prevCycleBackwardDownState = false, prev
 bool isToggled = false, isSendDown, isCycleForwardDown = false, isCycleBackwardDown = false, isVolUpDown = false, isVolDownDown = false, isPitchUpDown = false, isPitchDownDown = false, prevResetState = false;
 SHORT sendKeyState = 0x7F, cycleForwardKeyState = 0x7F, cycleBackwardKeyState = 0x7F, disableKeyState = 0x7F, volUpKeyState = 0x7F, volDownKeyState = 0x7F, pitchUpKeyState = 0x7F, pitchDownKeyState = 0x7F;
 uint32_t toggleKeyCode = 0x6B, voiceChatKeyCode, cycleForwardSoundKeyCode, cycleBackwardSoundKeyCode, toggleSoundboardKeyCode;
+char ipAddr[16] = "192.168.168.170";
 // TODO: Reimplement function to safely close out of threads and other tasks
 DWORD WINAPI keyPressesThread(LPVOID lpParameter) {
   while (true) {
@@ -76,10 +78,26 @@ DWORD WINAPI keyPressesThread(LPVOID lpParameter) {
   }
   return 0;
 }
+int is_valid_ip(const char* ip_address) {
+  struct in_addr addr;
+  int result = inet_pton(AF_INET, ip_address, &addr);
+  return result != 0;
+}
+void setIpAddr(char* ip) {
+  if (is_valid_ip(ip)) {
+    printf("Changing IP address from %s to: %s\n", ipAddr, ip);
+    strcpy(ipAddr, ip);
+    printf("Changed IP address to: %s\n", ipAddr);
+  }
+}
+float amplify_by_db(float audioSplice, int n_dB) {
+  float gain = powf(10.0f, (float)n_dB / 20.0f);
+  return audioSplice *= gain;
+}
 void setVolume_net(int vol, bool shouldAmplify) {
   int n_dB = 15;
   if (shouldAmplify) {
-    volume = ((float)vol / 100.0F) * powf(10.0f, (float)n_dB / 20.0f);
+    volume = amplify_by_db(((float)vol / 100.0F), n_dB);
   } else {
     volume = (float)vol / 100.0F;
   }
@@ -338,7 +356,7 @@ void deinitAll_net() {
 int startMicPassthrough_net(int captureDev, int playbackDev) {
   HANDLE hThread;
   DWORD dwThreadId;
-  netInitUDP("192.168.168.170", 2224);
+  netInitUDP(ipAddr, 2224);
   int captureDevListCnt = 1;
   int playbackDevListCnt = 1;
   initSoundHardwareVars(captureDevListCnt, playbackDevListCnt);
