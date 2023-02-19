@@ -377,7 +377,6 @@ int spawnNewMiniaudioThread(int threadIndex, int deviceMode, int *realmicDeviceI
     return -1;
   }
 
-  Sleep(100);
   ma_result devStartRes = ma_device_start(&device[threadIndex]);
   if (devStartRes != MA_SUCCESS) {
     printf("FATAL: Error starting engine..\n");

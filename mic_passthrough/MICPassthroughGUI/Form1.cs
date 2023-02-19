@@ -19,7 +19,7 @@ namespace MicPassthroughAndRemoteMic {
         Thread micThr, micThrNet;
         public Form1() {
             InitializeComponent();
-            this.FormClosing += (s, e) => {
+            /*this.FormClosing += (s, e) => {
                 if (Form1.actuallyClose == false) {
                     notifyIcon1.Visible = true;
                     notifyIcon1.ShowBalloonTip(1500);
@@ -31,7 +31,7 @@ namespace MicPassthroughAndRemoteMic {
                     System.Threading.Thread.Sleep(1250);
                     Environment.Exit(0);
                 }
-            };
+            };*/
         }
         [System.Runtime.InteropServices.DllImport("MIC_Passthrough.dll")]
         unsafe static extern int startMicPassthrough(int captureDev, int playbackDev);
@@ -45,12 +45,8 @@ namespace MicPassthroughAndRemoteMic {
         unsafe static extern bool transmitState();
         [System.Runtime.InteropServices.DllImport("MIC_Passthrough.dll")]
         unsafe static extern void setVolume(int volume);
-        /*[System.Runtime.InteropServices.DllImport("MIC_Passthrough.dll")]
-        unsafe static extern float getAmplitude();*/
         [System.Runtime.InteropServices.DllImport("MIC_Passthrough_Net.dll")]
         unsafe static extern int startMicPassthrough_net(int captureDev, int playbackDev);
-        /*[System.Runtime.InteropServices.DllImport("MIC_Passthrough_Net.dll")]
-        unsafe static extern int retDevNameList_net(StringBuilder playbackCount, StringBuilder captureCount, StringBuilder playbackListGUI, StringBuilder captureListGUI, int len);*/
         [System.Runtime.InteropServices.DllImport("MIC_Passthrough_Net.dll")]
         unsafe static extern float getVadProbability_net();
         [System.Runtime.InteropServices.DllImport("MIC_Passthrough_Net.dll")]
@@ -59,8 +55,6 @@ namespace MicPassthroughAndRemoteMic {
         unsafe static extern bool transmitState_net();
         [System.Runtime.InteropServices.DllImport("MIC_Passthrough_Net.dll")]
         unsafe static extern void setVolume_net(int volume);
-        /*[System.Runtime.InteropServices.DllImport("MIC_Passthrough_Net.dll")]
-        unsafe static extern float getAmplitude_net();*/
         private static bool firstRun1 = true;
         private static bool firstRun2 = true;
         private void Form1_Load(object sender, EventArgs e) {
@@ -83,6 +77,7 @@ namespace MicPassthroughAndRemoteMic {
             if (firstRun1 == true) {
                 if (resetSettings) {
                     Properties.Settings.Default.PlaybackDeviceID = 0;
+                    Properties.Settings.Default.AuxDeviceID = 0;
                     Properties.Settings.Default.Save();
                 }
                 checkedListBoxVirtMic.SetItemChecked(Properties.Settings.Default.PlaybackDeviceID, true);
@@ -104,10 +99,12 @@ namespace MicPassthroughAndRemoteMic {
             }
             micThr = new Thread(micFunc);
             micThr.IsBackground = true;
+            micThr.DisableComObjectEagerCleanup();
             micThr.Start();
             //
             micThrNet = new Thread(micFunc_net);
             micThrNet.IsBackground = true;
+            micThrNet.DisableComObjectEagerCleanup();
             micThrNet.Start();
         }
         private static void micFunc() {
@@ -118,7 +115,8 @@ namespace MicPassthroughAndRemoteMic {
             }
         }
         private static void micFunc_net() {
-            System.Threading.Thread.Sleep(3500);
+            System.Threading.Thread.Sleep(1500);
+            //
             while (true) {
                 Console.WriteLine("Launching network thread with [capture ID : playback ID : Aux ID]: " + Properties.Settings.Default.CaptureDeviceID.ToString() + " : " + Properties.Settings.Default.PlaybackDeviceID.ToString() + " : " + Properties.Settings.Default.AuxDeviceID.ToString());
                 startMicPassthrough_net(Properties.Settings.Default.CaptureDeviceID, Properties.Settings.Default.AuxDeviceID);
