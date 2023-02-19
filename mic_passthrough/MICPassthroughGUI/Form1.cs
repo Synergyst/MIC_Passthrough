@@ -19,7 +19,7 @@ namespace MicPassthroughAndRemoteMic {
         Thread micThr, micThrNet;
         public Form1() {
             InitializeComponent();
-            /*this.FormClosing += (s, e) => {
+            this.FormClosing += (s, e) => {
                 if (Form1.actuallyClose == false) {
                     notifyIcon1.Visible = true;
                     notifyIcon1.ShowBalloonTip(1500);
@@ -31,7 +31,7 @@ namespace MicPassthroughAndRemoteMic {
                     System.Threading.Thread.Sleep(1250);
                     Environment.Exit(0);
                 }
-            };*/
+            };
         }
         [System.Runtime.InteropServices.DllImport("MIC_Passthrough.dll")]
         unsafe static extern int startMicPassthrough(int captureDev, int playbackDev);
