@@ -78,17 +78,18 @@ DWORD WINAPI keyPressesThread(LPVOID lpParameter) {
   }
   return 0;
 }
-int is_valid_ip(const char* ip_address) {
+/*int is_valid_ip(const char* ip_address) {
   struct in_addr addr;
   int result = inet_pton(AF_INET, ip_address, &addr);
   return result != 0;
-}
+}*/
 void setIpAddr(char* ip) {
-  if (is_valid_ip(ip)) {
+  strcpy(ipAddr, ip);
+  /*if (is_valid_ip(ip)) {
     printf("Changing IP address from %s to: %s\n", ipAddr, ip);
     strcpy(ipAddr, ip);
     printf("Changed IP address to: %s\n", ipAddr);
-  }
+  }*/
 }
 float amplify_by_db(float audioSplice, int n_dB) {
   float gain = powf(10.0f, (float)n_dB / 20.0f);
