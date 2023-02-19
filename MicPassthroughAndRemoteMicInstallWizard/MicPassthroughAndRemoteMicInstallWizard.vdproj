@@ -3,7 +3,7 @@
 "VSVersion" = "3:800"
 "ProjectType" = "8:{978C614F-708E-4E1A-B201-565925725DBA}"
 "IsWebType" = "8:FALSE"
-"ProjectName" = "8:MicPassthroughAndRemoteMicInstallWizard"
+"ProjectName" = "8:Mic Passthrough + Remote Mic"
 "LanguageId" = "3:1033"
 "CodePage" = "3:1252"
 "UILanguageId" = "3:1033"
@@ -118,13 +118,13 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_499CCA2702752C0AC478E3DA26580A8A"
+        "OwnerKey" = "8:_A3FE4F1B4DDE412DA9FBCB86AF84452E"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_A3FE4F1B4DDE412DA9FBCB86AF84452E"
+        "OwnerKey" = "8:_499CCA2702752C0AC478E3DA26580A8A"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -145,6 +145,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
         "Release"
         {
@@ -161,6 +169,22 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.2"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.7.2"
+                    }
+                }
+            }
         }
     }
     "Deployable"
@@ -371,7 +395,7 @@
             {
             "DefaultLocation" = "8:[ProgramFiles64Folder][Manufacturer]\\[ProductName]"
             "Name" = "8:#1925"
-            "AlwaysCreate" = "11:FALSE"
+            "AlwaysCreate" = "11:TRUE"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Property" = "8:TARGETDIR"
@@ -382,7 +406,7 @@
             "{1525181F-901A-416C-8A58-119130FE478E}:_C107749817EE4F8DAB0C1439030FDB67"
             {
             "Name" = "8:#1919"
-            "AlwaysCreate" = "11:FALSE"
+            "AlwaysCreate" = "11:TRUE"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Property" = "8:ProgramMenuFolder"
@@ -393,7 +417,7 @@
             "{1525181F-901A-416C-8A58-119130FE478E}:_DD1CF650C8664E6F9E86B2FF7BE1CDE7"
             {
             "Name" = "8:#1916"
-            "AlwaysCreate" = "11:FALSE"
+            "AlwaysCreate" = "11:TRUE"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Property" = "8:DesktopFolder"
@@ -416,9 +440,9 @@
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
-        "ProductName" = "8:MicPassthroughAndRemoteMicInstallWizard"
+        "ProductName" = "8:Mic Passthrough + Remote Mic"
         "ProductCode" = "8:{7B03F476-00CB-4519-9D5D-F5B51A2E7AF4}"
-        "PackageCode" = "8:{C21F90FA-E364-4132-84AE-EBDBD478F887}"
+        "PackageCode" = "8:{51935313-529C-4FB8-950C-27316A80191C}"
         "UpgradeCode" = "8:{A98118B6-3EF0-46EF-B94F-1EE0F8E88F4B}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
@@ -429,7 +453,7 @@
         "Manufacturer" = "8:Synergyst"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:https://github.com/Synergyst/MIC_Passthrough/issues"
-        "Title" = "8:Mic Passthrough + Remote Mic Install Wizard"
+        "Title" = "8:Mic Passthrough + Remote Mic Installer"
         "Subject" = "8:Mic Passthrough + Remote Mic"
         "ARPCONTACT" = "8:Synergyst"
         "Keywords" = "8:"
@@ -538,6 +562,34 @@
         }
         "Shortcut"
         {
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_220F7549E41D45F69328C365FD86DCE2"
+            {
+            "Name" = "8:Mic Passthrough + Remote Mic"
+            "Arguments" = "8:"
+            "Description" = "8:Microphone Passthrough + Remote Mic"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_A3FE4F1B4DDE412DA9FBCB86AF84452E"
+            "Folder" = "8:_DD1CF650C8664E6F9E86B2FF7BE1CDE7"
+            "WorkingFolder" = "8:_0FAD8CE8101440ACA07E7621B064C5BB"
+            "Icon" = "8:_1677641EC7C14617BD4E5AE6A55C3055"
+            "Feature" = "8:"
+            }
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_F51F489C0C5D44A197FE4C999245A48C"
+            {
+            "Name" = "8:Mic Passthrough + Remote Mic"
+            "Arguments" = "8:"
+            "Description" = "8:Microphone Passthrough + Remote Mic"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_A3FE4F1B4DDE412DA9FBCB86AF84452E"
+            "Folder" = "8:_C107749817EE4F8DAB0C1439030FDB67"
+            "WorkingFolder" = "8:_0FAD8CE8101440ACA07E7621B064C5BB"
+            "Icon" = "8:_1677641EC7C14617BD4E5AE6A55C3055"
+            "Feature" = "8:"
+            }
         }
         "UserInterface"
         {
