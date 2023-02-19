@@ -67,6 +67,8 @@ namespace MicPassthroughAndRemoteMic {
             this.label10 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.timer6 = new System.Windows.Forms.Timer(this.components);
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.checkBox2 = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -148,11 +150,11 @@ namespace MicPassthroughAndRemoteMic {
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(316, 535);
+            this.progressBar1.Location = new System.Drawing.Point(340, 535);
             this.progressBar1.MarqueeAnimationSpeed = 1;
             this.progressBar1.Maximum = 1000;
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(100, 11);
+            this.progressBar1.Size = new System.Drawing.Size(76, 11);
             this.progressBar1.Step = 1;
             this.progressBar1.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.progressBar1.TabIndex = 11;
@@ -189,10 +191,10 @@ namespace MicPassthroughAndRemoteMic {
             // 
             // progressBar2
             // 
-            this.progressBar2.Location = new System.Drawing.Point(316, 564);
+            this.progressBar2.Location = new System.Drawing.Point(340, 564);
             this.progressBar2.MarqueeAnimationSpeed = 1;
             this.progressBar2.Name = "progressBar2";
-            this.progressBar2.Size = new System.Drawing.Size(100, 11);
+            this.progressBar2.Size = new System.Drawing.Size(76, 11);
             this.progressBar2.Step = 1;
             this.progressBar2.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.progressBar2.TabIndex = 15;
@@ -201,7 +203,7 @@ namespace MicPassthroughAndRemoteMic {
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.25F);
-            this.label5.Location = new System.Drawing.Point(371, 578);
+            this.label5.Location = new System.Drawing.Point(369, 578);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(45, 12);
             this.label5.TabIndex = 16;
@@ -255,21 +257,21 @@ namespace MicPassthroughAndRemoteMic {
             // 
             // progressBar3
             // 
-            this.progressBar3.Location = new System.Drawing.Point(316, 615);
+            this.progressBar3.Location = new System.Drawing.Point(340, 615);
             this.progressBar3.MarqueeAnimationSpeed = 1;
             this.progressBar3.Maximum = 1000;
             this.progressBar3.Name = "progressBar3";
-            this.progressBar3.Size = new System.Drawing.Size(100, 11);
+            this.progressBar3.Size = new System.Drawing.Size(76, 11);
             this.progressBar3.Step = 1;
             this.progressBar3.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.progressBar3.TabIndex = 22;
             // 
             // progressBar4
             // 
-            this.progressBar4.Location = new System.Drawing.Point(316, 648);
+            this.progressBar4.Location = new System.Drawing.Point(340, 648);
             this.progressBar4.MarqueeAnimationSpeed = 1;
             this.progressBar4.Name = "progressBar4";
-            this.progressBar4.Size = new System.Drawing.Size(100, 11);
+            this.progressBar4.Size = new System.Drawing.Size(76, 11);
             this.progressBar4.Step = 1;
             this.progressBar4.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.progressBar4.TabIndex = 23;
@@ -294,7 +296,7 @@ namespace MicPassthroughAndRemoteMic {
             // 
             // pictureBox2
             // 
-            this.pictureBox2.Location = new System.Drawing.Point(222, 615);
+            this.pictureBox2.Location = new System.Drawing.Point(340, 665);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(23, 23);
             this.pictureBox2.TabIndex = 25;
@@ -303,7 +305,7 @@ namespace MicPassthroughAndRemoteMic {
             // pictureBox1
             // 
             this.pictureBox1.InitialImage = null;
-            this.pictureBox1.Location = new System.Drawing.Point(222, 535);
+            this.pictureBox1.Location = new System.Drawing.Point(340, 581);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(23, 23);
             this.pictureBox1.TabIndex = 24;
@@ -323,7 +325,7 @@ namespace MicPassthroughAndRemoteMic {
             // 
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.25F);
-            this.label7.Location = new System.Drawing.Point(362, 662);
+            this.label7.Location = new System.Drawing.Point(369, 662);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(45, 12);
             this.label7.TabIndex = 29;
@@ -332,7 +334,7 @@ namespace MicPassthroughAndRemoteMic {
             // label8
             // 
             this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.25F);
-            this.label8.Location = new System.Drawing.Point(253, 594);
+            this.label8.Location = new System.Drawing.Point(277, 593);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(50, 12);
             this.label8.TabIndex = 30;
@@ -342,7 +344,7 @@ namespace MicPassthroughAndRemoteMic {
             // label9
             // 
             this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.25F);
-            this.label9.Location = new System.Drawing.Point(244, 677);
+            this.label9.Location = new System.Drawing.Point(268, 676);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(66, 12);
             this.label9.TabIndex = 31;
@@ -356,7 +358,7 @@ namespace MicPassthroughAndRemoteMic {
             this.knobControl2.KnobBackColor = System.Drawing.Color.WhiteSmoke;
             this.knobControl2.KnobPointerStyle = KnobControl.KnobControl.KnobPointerStyles.line;
             this.knobControl2.LargeChange = 5;
-            this.knobControl2.Location = new System.Drawing.Point(251, 615);
+            this.knobControl2.Location = new System.Drawing.Point(275, 615);
             this.knobControl2.Maximum = 100;
             this.knobControl2.Minimum = 0;
             this.knobControl2.Name = "knobControl2";
@@ -381,7 +383,7 @@ namespace MicPassthroughAndRemoteMic {
             this.knobControl1.KnobBackColor = System.Drawing.Color.WhiteSmoke;
             this.knobControl1.KnobPointerStyle = KnobControl.KnobControl.KnobPointerStyles.line;
             this.knobControl1.LargeChange = 5;
-            this.knobControl1.Location = new System.Drawing.Point(251, 535);
+            this.knobControl1.Location = new System.Drawing.Point(275, 535);
             this.knobControl1.Maximum = 100;
             this.knobControl1.Minimum = 0;
             this.knobControl1.Name = "knobControl1";
@@ -402,7 +404,7 @@ namespace MicPassthroughAndRemoteMic {
             // label10
             // 
             this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.25F);
-            this.label10.Location = new System.Drawing.Point(249, 582);
+            this.label10.Location = new System.Drawing.Point(273, 581);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(59, 12);
             this.label10.TabIndex = 32;
@@ -413,7 +415,7 @@ namespace MicPassthroughAndRemoteMic {
             // 
             this.label11.BackColor = System.Drawing.Color.Transparent;
             this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.25F);
-            this.label11.Location = new System.Drawing.Point(249, 664);
+            this.label11.Location = new System.Drawing.Point(273, 663);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(59, 15);
             this.label11.TabIndex = 33;
@@ -426,6 +428,28 @@ namespace MicPassthroughAndRemoteMic {
             this.timer6.Interval = 50;
             this.timer6.Tick += new System.EventHandler(this.timer6_Tick);
             // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.25F);
+            this.checkBox1.Location = new System.Drawing.Point(371, 593);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(45, 16);
+            this.checkBox1.TabIndex = 34;
+            this.checkBox1.Text = "+3dB";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            // 
+            // checkBox2
+            // 
+            this.checkBox2.AutoSize = true;
+            this.checkBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.25F);
+            this.checkBox2.Location = new System.Drawing.Point(371, 677);
+            this.checkBox2.Name = "checkBox2";
+            this.checkBox2.Size = new System.Drawing.Size(45, 16);
+            this.checkBox2.TabIndex = 35;
+            this.checkBox2.Text = "+3dB";
+            this.checkBox2.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -433,6 +457,8 @@ namespace MicPassthroughAndRemoteMic {
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(212)))), ((int)(((byte)(212)))), ((int)(((byte)(255)))));
             this.ClientSize = new System.Drawing.Size(419, 697);
+            this.Controls.Add(this.checkBox2);
+            this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.label9);
@@ -510,6 +536,8 @@ namespace MicPassthroughAndRemoteMic {
         private Label label10;
         private Label label11;
         private Timer timer6;
+        private CheckBox checkBox1;
+        private CheckBox checkBox2;
     }
 }
 
